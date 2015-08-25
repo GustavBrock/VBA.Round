@@ -1,7 +1,7 @@
-Attribute VB_Name = "RoundingTest"
+Attribute VB_Name = "RoundingSignificantTest"
 ' RoundSignificantTest v1.0.0
 ' (c) Gustav Brock, Cactus Data ApS, CPH
-' https://github.com/CactusData/VBA.RoundSignificant
+' https://github.com/GustavBrock/VBA.RoundSignificant
 '
 ' Test function to list rounding of example values.
 '
