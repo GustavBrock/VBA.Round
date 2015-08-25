@@ -1,7 +1,7 @@
-Attribute VB_Name = "Rounding"
+Attribute VB_Name = "RoundingSignificant"
 ' RoundSignificant v1.0.1
 ' (c) Gustav Brock, Cactus Data ApS, CPH
-' https://github.com/CactusData/VBA.RoundSignificant
+' https://github.com/GustavBrock/VBA.RoundSignificant
 '
 ' Set of functions for rounding Currency, Decimal, and Double
 ' to a specified count of significant figures.
@@ -11,11 +11,9 @@ Attribute VB_Name = "Rounding"
 Option Compare Database
 Option Explicit
 
-
 ' Common constants.
 '
 Public Const Base10     As Double = 10
-
 
 ' Rounds Value to have significant figures as specified with parameter Digits.
 '
@@ -100,7 +98,6 @@ Public Function RoundSignificantCur( _
 
 End Function
 
-
 ' Rounds Value to have significant figures as specified with parameter Digits.
 '
 ' Performs no rounding if Digits is zero.
@@ -181,7 +178,6 @@ Public Function RoundSignificantDec( _
 
 End Function
 
-
 ' Rounds Value to have significant figures as specified with parameter Digits.
 '
 ' Performs no rounding if Digits is zero.
@@ -261,7 +257,6 @@ Public Function RoundSignificantDbl( _
     RoundSignificantDbl = ReturnValue
 
 End Function
-
 
 ' Returns Log 10 of Value.
 '
