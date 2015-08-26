@@ -278,3 +278,4 @@ Public Function Log10( _
     Log10 = Log(Value) / Log(Base10)
 
 End Function
+
