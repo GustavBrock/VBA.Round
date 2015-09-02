@@ -10,8 +10,11 @@ However, often precision is mandatory, and with the speed of computers today, a 
 They cover the normal rounding methods:
 
 •Round down, with the option to round negative values towards zero
+
 •Round up, with the option to round negative values away from zero
+
 •Round by 4/5, either away from zero or to even  (Banker's Rounding)
+
 •Round to a count of significant figures
 
 The first three functions accept all the numeric data types, while the last exists in three varieties - for Currency, Decimal, and Double respectively.
