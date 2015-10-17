@@ -23,3 +23,13 @@ They all accept a specified count of decimals - including a negative count which
 Files can be imported into an existing project with the command:
 
 LoadFromText acModule, "RoundingMethods", "d:\path\RoundingMethods.bas"
+
+
+Documentation is in-line or here:
+
+CodePlex:
+http://www.codeproject.com/Tips/1022704/Rounding-Values-Up-Down-By-Or-To-Significant-Figur
+
+Experts-Exchange:
+http://rdsrc.us/K5cO9F
+
