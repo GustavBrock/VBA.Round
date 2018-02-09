@@ -1,13 +1,13 @@
 Attribute VB_Name = "RoundingMethodsTest"
-' RoundingMethodsTest v1.0.0
-' (c) Gustav Brock, Cactus Data ApS, CPH
+' RoundingMethodsTest v1.1.0
+' (c) 2018-02-09. Gustav Brock, Cactus Data ApS, CPH.
+'
 ' https://github.com/GustavBrock/VBA.Round
 '
 ' Test function to list rounding of example values.
 '
 ' License: MIT (http://opensource.org/licenses/mit-license.php)
 
-Option Compare Database
 Option Explicit
 
 ' Verify correct Round returns.
@@ -582,7 +582,7 @@ Private Function NiceDbl(Dbl As Double) As Double
   
 End Function
 
-' Prduces examples of values rounded to significant figures.
+' Produces examples of values rounded to significant figures.
 '
 ' 2015-08-25. Gustav Brock, Cactus Data, CPH.
 '
@@ -751,6 +751,99 @@ Public Function RoundingSignificantDemo()
         Debug.Print "Value:" & Str(Value) & " - RoundedToEven:" & Str(RoundToEven) & " - RoundedAwayFromZero:" & Str(RoundAwayFromZero)
     Next
     Debug.Print
+
+End Function
+
+' 2018-02-09. Gustav Brock, Cactus Data ApS, CPH.
+'
+Public Function RunRoundingSumDemo()
+
+    Dim Values                  As Variant
+    Dim Value                   As Variant
+    Dim Total                   As Variant
+    Dim RequestedTotal          As Variant
+    Dim Result                  As Variant
+    Dim NumDigitsAfterDecimal   As Long
+    Dim ValuesSum               As Variant
+    Dim RoundedSum              As Variant
+    
+    Dim Tests                   As Variant
+    Dim Test                    As Integer
+    Dim Item                    As Integer
+    
+    ' Select tests to run.
+    Tests = Array(9)
+    
+    For Test = LBound(Tests) To UBound(Tests)
+        RequestedTotal = 0
+        NumDigitsAfterDecimal = 0
+        Select Case Tests(Test)
+            Case 1
+                Values = Array(-1.66, -1.66, -1.67, 1.7, -1.66)
+                RequestedTotal = -11.12
+                NumDigitsAfterDecimal = 1
+            Case 2
+                Values = Array(1.66, 1.66, 1.67, -1.7, 1.66)
+                RequestedTotal = -11.12
+                NumDigitsAfterDecimal = 1
+            Case 3
+                Values = Array(1.333333, -1.333333, 1.333333, 2.333333, 1.33)
+                RequestedTotal = 0
+                NumDigitsAfterDecimal = 1
+            Case 4
+                Values = Array(1.333333, -1.333333, 1.333333, 2.333333, 1.33)
+                RequestedTotal = 5.9
+                NumDigitsAfterDecimal = 1
+            Case 5
+                Values = Array(1.333333, 1.333333, 0, 0, 1.33)
+                RequestedTotal = 4.1
+            Case 6
+                Values = Array(1.333333 * 10 ^ 304, 1.333333 * 10 ^ 304, 0, 0, 1.33 * 10 ^ 304)
+                RequestedTotal = 4.1
+            Case 7
+                Values = Array(433.258, 287.2336, 78.5221, 31198.6551, 4.92236)
+                NumDigitsAfterDecimal = -2
+            Case 8
+                Values = Array(433.258, 287.2336, 78.5221, 31198.6551, 4.92236)
+                RequestedTotal = 10000
+                NumDigitsAfterDecimal = -2
+            Case 9
+                Values = Array(433.258, 287.2336, 78.5221, 31198.6551, 4.92236)
+                RequestedTotal = 10000
+                NumDigitsAfterDecimal = -1
+            Case Else
+                Values = Null
+        End Select
+        If Not IsNull(Values) Then
+            Debug.Print "Item", "Result  <-", "Input", "Rounded", "Difference", "Relative Difference"
+            Total = RequestedTotal
+            ValuesSum = 0
+            RoundedSum = 0
+            Result = RoundSum(Values, Total, NumDigitsAfterDecimal)
+            For Item = LBound(Values) To UBound(Values)
+                If Values(Item) = 0 Then
+                    Value = 0
+                Else
+                    Value = Values(Item)
+                End If
+                Debug.Print _
+                    Item, _
+                    Result(Item), _
+                    Value, _
+                    RoundMid(Value, NumDigitsAfterDecimal), _
+                    RoundMid(Value, NumDigitsAfterDecimal) - Value, _
+                    IIf(Value = 0, 0, (RoundMid(Value, NumDigitsAfterDecimal) - Value) / IIf(Value = 0, 1, Value))
+                ValuesSum = ValuesSum + Value
+                RoundedSum = RoundedSum + RoundMid(Values(Item), NumDigitsAfterDecimal)
+            Next
+            Debug.Print "Test " & Tests(Test), Total, ValuesSum, RoundedSum
+            If RequestedTotal = 0 Then
+                RequestedTotal = ValuesSum
+            End If
+            Debug.Print "Expected:", RoundMid(RequestedTotal, NumDigitsAfterDecimal)
+            Debug.Print
+        End If
+    Next
 
 End Function
 
