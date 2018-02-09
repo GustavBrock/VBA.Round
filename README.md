@@ -1,5 +1,7 @@
 # VBA.Round
 
+### Introduction
+
 Superior functions for:
 
 * Rounding Currency, Decimal, and Double up, down, by 4/5, or to a specified count of significant figures
@@ -21,13 +23,13 @@ They cover the normal rounding methods:
 The first three functions accept all the numeric data types.  
 The forth exists in three varieties - for Currency, Decimal, and Double respectively.
 
-Finally, the function **RoundSum** will round a series of numbers so the sum of these matches the rounded sum of the unrounded values. Further, if a requested total is passed, the rounded values will be _scaled_, so the sum of these matches the rounded total. In cases where the sum of the rounded values doesn't match the rounded total, the rounded values will be adjusted where the applied error will be the relatively smallest.
+Finally, the function **RoundSum** will round a series of numbers so the sum of these matches the rounded sum of the unrounded values. Further, if a requested total is passed, the rounded values will be _scaled_, so the sum of these matches the rounded total. In cases where the sum of the rounded values doesn't match the rounded total, the rounded values will be adjusted where the applied error will be the relatively smallest.
 
 They all accept a specified count of decimals - including a negative count which will round to tens, hundreds, etc. Those with Variant as return type will return \_Null\_ for incomprehensible input.
 
 ### Usage
 
-Files can be imported into an existing project with the command:
+Files can be imported into an existing VBA project with the command:
 
 `LoadFromText acModule, "RoundingMethods", "d:\path\RoundingMethods.bas"`
 
