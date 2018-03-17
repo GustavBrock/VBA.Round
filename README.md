@@ -42,6 +42,6 @@ Documentation is in-line. Articles on the topic can be found here:
 
 **Experts-Exchange**:
 
-[https://www.experts-exchange.com/articles/20299/Rounding-values-up-down-by-4-5-or-to-significant-figures.html](Rounding values up, down, by 4/5, or to significant figures)
-[https://www.experts-exchange.com/articles/31683/Round-elements-of-a-sum-to-match-a-total.html](Round elements of a sum to match a total)
+[Rounding values up, down, by 4/5, or to significant figures](https://www.experts-exchange.com/articles/20299/Rounding-values-up-down-by-4-5-or-to-significant-figures.html)
+[Round elements of a sum to match a total](https://www.experts-exchange.com/articles/31683/Round-elements-of-a-sum-to-match-a-total.html)
 
