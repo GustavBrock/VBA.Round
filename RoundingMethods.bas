@@ -1,6 +1,6 @@
 Attribute VB_Name = "RoundingMethods"
-' RoundingMethods v1.2.0
-' (c) 2018-02-09. Gustav Brock, Cactus Data ApS, CPH
+' RoundingMethods v1.2.1
+' (c) 2018-03-16. Gustav Brock, Cactus Data ApS, CPH
 ' https://github.com/GustavBrock/VBA.Round
 '
 ' Set of functions for rounding Currency, Decimal, and Double
@@ -12,6 +12,7 @@ Option Explicit
 
 ' Common constants.
 '
+Public Const Base2      As Double = 2
 Public Const Base10     As Double = 10
 
 ' Returns Log 10 of Value.
@@ -564,7 +565,7 @@ End Function
 ' Internally, the function uses Decimal to achieve the highest
 ' precision and Double when the values exceed the range of Decimal.
 '
-' Result is an array holding the rounded values, as well as
+' The result is an array holding the rounded values, as well as
 ' (by reference) the rounded total.
 '
 ' If non-numeric values are passed, an error is raised.
@@ -572,7 +573,7 @@ End Function
 ' Requires:
 '   RoundMid
 '
-' 2018-02-09. Gustav Brock, Cactus Data ApS, CPH.
+' 2018-02-15. Gustav Brock, Cactus Data ApS, CPH.
 '
 Public Function RoundSum( _
     ByVal Values As Variant, _
@@ -713,11 +714,11 @@ Public Function RoundSum( _
     If RoundedTotal = 0 Then
         ' No total is requested.
         ' Use as total the rounded sum of the passed unrounded values.
-        RoundedTotal = RoundMid(PlusSum + MinusSum, NumDigitsAfterDecimal)
+        RoundedTotal = RoundMid(Sum, NumDigitsAfterDecimal)
     End If
     
     ' Check if a correction of the rounded values is needed.
-    If RoundedPlusSum - RoundedMinusSum = 0 Then
+    If RoundedPlusSum + RoundedMinusSum = 0 Then
         ' All items are zero. Nothing to do.
         ' Return zero.
         RoundedTotal = 0
@@ -734,25 +735,25 @@ Public Function RoundSum( _
         For Item = LBound(SortedItems) To UBound(SortedItems)
             SortedItems(Item) = Item
         Next
-        ' Sort the array after the rounding error and - for items with equal rounding error - the
+        ' Sort the array after the relative rounding error and - for items with equal rounding error - the
         ' size of the value of items.
         For Item = LBound(SortedItems) To UBound(SortedItems) - 1
             If Values(SortedItems(Item)) = 0 Then
                 ThisRelation = 0
             ElseIf VarType(Values(SortedItems(Item))) = vbDouble Then
                 ' Value is exceeding Decimal. Use Double.
-                ThisRelation = (Values(SortedItems(Item)) * Ratio - CDbl(RoundedValues(SortedItems(Item)))) / Values(SortedItems(Item))
+                ThisRelation = (Values(SortedItems(Item)) * Ratio - CDbl(RoundedValues(SortedItems(Item)))) * (Values(SortedItems(Item)) / Sum)
             Else
-                ThisRelation = (Values(SortedItems(Item)) * Ratio - RoundedValues(SortedItems(Item))) / Values(SortedItems(Item))
+                ThisRelation = (Values(SortedItems(Item)) * Ratio - RoundedValues(SortedItems(Item))) * (Values(SortedItems(Item)) / Sum)
             End If
             For SortItem = Item + 1 To UBound(SortedItems)
                 If Values(SortedItems(SortItem)) = 0 Then
                     SortRelation = 0
                 ElseIf VarType(Values(SortedItems(SortItem))) = vbDouble Then
                     ' Value is exceeding Decimal. Use Double.
-                    SortRelation = (Values(SortedItems(SortItem)) * Ratio - CDbl(RoundedValues(SortedItems(SortItem)))) / Values(SortedItems(SortItem))
+                    SortRelation = (Values(SortedItems(SortItem)) * Ratio - CDbl(RoundedValues(SortedItems(SortItem)))) * (Values(SortedItems(SortItem)) / Sum)
                 Else
-                    SortRelation = (Values(SortedItems(SortItem)) * Ratio - RoundedValues(SortedItems(SortItem))) / Values(SortedItems(SortItem))
+                    SortRelation = (Values(SortedItems(SortItem)) * Ratio - RoundedValues(SortedItems(SortItem))) * (Values(SortedItems(SortItem)) / Sum)
                 End If
                 If Abs(ThisRelation) >= Abs(SortRelation) Or (ThisRelation = SortRelation And Abs(RoundedValues(SortedItems(Item))) >= Abs(RoundedValues(SortedItems(SortItem)))) Then
                     ThisItem = SortedItems(Item)
@@ -761,7 +762,7 @@ Public Function RoundSum( _
                 End If
             Next
         Next
-
+        
         ' Distribute a difference between the rounded sum and the requested total.
         Difference = Sgn(RoundedSum) * (Abs(RoundedTotal) - Abs(RoundedSum))
         ' If Difference is positive, some values must be rounded up.
@@ -803,3 +804,4 @@ Public Function RoundSum( _
     RoundSum = RoundedValues
     
 End Function
+
