@@ -40,10 +40,8 @@ Documentation is in-line. Articles on the topic can be found here:
 **CodePlex**:  
 [http://www.codeproject.com/Tips/1022704/Rounding-Values-Up-Down-By-Or-To-Significant-Figur](http://www.codeproject.com/Tips/1022704/Rounding-Values-Up-Down-By-Or-To-Significant-Figur)
 
-**Experts-Exchange**:
-[Rounding values up, down, by 4/5, or to significant figures]
-(https://www.experts-exchange.com/articles/20299/Rounding-values-up-down-by-4-5-or-to-significant-figures.html)
+**Experts-Exchange**:  
+[Rounding values up, down, by 4/5, or to significant figures](https://www.experts-exchange.com/articles/20299/Rounding-values-up-down-by-4-5-or-to-significant-figures.html)
 
-[Round elements of a sum to match a total]
-(https://www.experts-exchange.com/articles/31683/Round-elements-of-a-sum-to-match-a-total.html)
+[Round elements of a sum to match a total](https://www.experts-exchange.com/articles/31683/Round-elements-of-a-sum-to-match-a-total.html)
 
