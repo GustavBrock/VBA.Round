@@ -1,6 +1,6 @@
 Attribute VB_Name = "RoundingMethodsTest"
-' RoundingMethodsTest v1.1.0
-' (c) 2018-02-09. Gustav Brock, Cactus Data ApS, CPH.
+' RoundingMethodsTest v1.2.1
+' (c) 2018-03-16. Gustav Brock, Cactus Data ApS, CPH.
 '
 ' https://github.com/GustavBrock/VBA.Round
 '
@@ -592,15 +592,15 @@ Public Function RoundingSignificantDemo()
     Dim RoundToEven         As Variant
     Dim RoundAwayFromZero   As Variant
     Dim Digits              As Integer
-    Dim I                   As Integer
+    Dim i                   As Integer
     
     Value = CCur(30.675)
     Digits = 14
     
     Debug.Print "Cur 14"
-    For I = 0 To 10
-        RoundToEven = RoundSignificantCur(Value + I / 100, Digits, , True)
-        RoundAwayFromZero = RoundSignificantCur(Value + I / 100, Digits)
+    For i = 0 To 10
+        RoundToEven = RoundSignificantCur(Value + i / 100, Digits, , True)
+        RoundAwayFromZero = RoundSignificantCur(Value + i / 100, Digits)
         Debug.Print "Value:" & Str(Value) & " - RoundedToEven:" & Str(RoundToEven) & " - RoundedAwayFromZero:" & Str(RoundAwayFromZero)
     Next
     Debug.Print
@@ -609,9 +609,9 @@ Public Function RoundingSignificantDemo()
     Digits = 4
     
     Debug.Print "Cur 4"
-    For I = 0 To 10
-        RoundToEven = RoundSignificantCur(Value + I / 100, Digits, , True)
-        RoundAwayFromZero = RoundSignificantCur(Value + I / 100, Digits)
+    For i = 0 To 10
+        RoundToEven = RoundSignificantCur(Value + i / 100, Digits, , True)
+        RoundAwayFromZero = RoundSignificantCur(Value + i / 100, Digits)
         Debug.Print "Value:" & Str(Value) & " - RoundedToEven:" & Str(RoundToEven) & " - RoundedAwayFromZero:" & Str(RoundAwayFromZero)
     Next
     Debug.Print
@@ -621,9 +621,9 @@ Public Function RoundingSignificantDemo()
     Digits = 28
     
     Debug.Print "Dec 28"
-    For I = 0 To 10
-        RoundToEven = RoundSignificantDec(Value + I / 100, Digits, , True)
-        RoundAwayFromZero = RoundSignificantDec(Value + I / 100, Digits)
+    For i = 0 To 10
+        RoundToEven = RoundSignificantDec(Value + i / 100, Digits, , True)
+        RoundAwayFromZero = RoundSignificantDec(Value + i / 100, Digits)
         Debug.Print "Value:" & Str(Value) & " - RoundedToEven:" & Str(RoundToEven) & " - RoundedAwayFromZero:" & Str(RoundAwayFromZero)
     Next
     Debug.Print
@@ -632,9 +632,9 @@ Public Function RoundingSignificantDemo()
     Digits = 4
     
     Debug.Print "Dec 4"
-    For I = 0 To 10
-        RoundToEven = RoundSignificantDec(Value + I / 100, Digits, , True)
-        RoundAwayFromZero = RoundSignificantDec(Value + I / 100, Digits)
+    For i = 0 To 10
+        RoundToEven = RoundSignificantDec(Value + i / 100, Digits, , True)
+        RoundAwayFromZero = RoundSignificantDec(Value + i / 100, Digits)
         Debug.Print "Value:" & Str(Value) & " - RoundedToEven:" & Str(RoundToEven) & " - RoundedAwayFromZero:" & Str(RoundAwayFromZero)
     Next
     Debug.Print
@@ -644,9 +644,9 @@ Public Function RoundingSignificantDemo()
     Digits = 28
     
     Debug.Print "Dec 28"
-    For I = 0 To 10
-        RoundToEven = RoundSignificantDec(Value + I / 100, Digits, , True)
-        RoundAwayFromZero = RoundSignificantDec(Value + I / 100, Digits)
+    For i = 0 To 10
+        RoundToEven = RoundSignificantDec(Value + i / 100, Digits, , True)
+        RoundAwayFromZero = RoundSignificantDec(Value + i / 100, Digits)
         Debug.Print "Value:" & Str(Value) & " - RoundedToEven:" & Str(RoundToEven) & " - RoundedAwayFromZero:" & Str(RoundAwayFromZero)
     Next
     Debug.Print
@@ -655,9 +655,9 @@ Public Function RoundingSignificantDemo()
     Digits = 4
     
     Debug.Print "Dec 4"
-    For I = 0 To 10
-        RoundToEven = RoundSignificantDec(Value + I / 100, Digits, , True)
-        RoundAwayFromZero = RoundSignificantDec(Value + I / 100, Digits)
+    For i = 0 To 10
+        RoundToEven = RoundSignificantDec(Value + i / 100, Digits, , True)
+        RoundAwayFromZero = RoundSignificantDec(Value + i / 100, Digits)
         Debug.Print "Value:" & Str(Value) & " - RoundedToEven:" & Str(RoundToEven) & " - RoundedAwayFromZero:" & Str(RoundAwayFromZero)
     Next
     Debug.Print
@@ -667,9 +667,9 @@ Public Function RoundingSignificantDemo()
     Digits = 28
     
     Debug.Print "Dec 28"
-    For I = 0 To 10
-        RoundToEven = RoundSignificantDec(Value + I * 10 ^ 9 / 100, Digits, , True)
-        RoundAwayFromZero = RoundSignificantDec(Value + I * 10 ^ 9 / 100, Digits)
+    For i = 0 To 10
+        RoundToEven = RoundSignificantDec(Value + i * 10 ^ 9 / 100, Digits, , True)
+        RoundAwayFromZero = RoundSignificantDec(Value + i * 10 ^ 9 / 100, Digits)
         Debug.Print "Value:" & Str(Value) & " - RoundedToEven:" & Str(RoundToEven) & " - RoundedAwayFromZero:" & Str(RoundAwayFromZero)
     Next
     Debug.Print
@@ -678,9 +678,9 @@ Public Function RoundingSignificantDemo()
     Digits = 4
     
     Debug.Print "Dec 4"
-    For I = 0 To 10
-        RoundToEven = RoundSignificantDec(Value + I * 10 ^ 9 / 100, Digits, , True)
-        RoundAwayFromZero = RoundSignificantDec(Value + I * 10 ^ 9 / 100, Digits)
+    For i = 0 To 10
+        RoundToEven = RoundSignificantDec(Value + i * 10 ^ 9 / 100, Digits, , True)
+        RoundAwayFromZero = RoundSignificantDec(Value + i * 10 ^ 9 / 100, Digits)
         Debug.Print "Value:" & Str(Value) & " - RoundedToEven:" & Str(RoundToEven) & " - RoundedAwayFromZero:" & Str(RoundAwayFromZero)
     Next
     Debug.Print
@@ -690,9 +690,9 @@ Public Function RoundingSignificantDemo()
     Digits = 14
     
     Debug.Print "Dbl 14"
-    For I = 0 To 10
-        RoundToEven = RoundSignificantDbl(Value + I / 100, Digits, , True)
-        RoundAwayFromZero = RoundSignificantDbl(Value + I / 100, Digits)
+    For i = 0 To 10
+        RoundToEven = RoundSignificantDbl(Value + i / 100, Digits, , True)
+        RoundAwayFromZero = RoundSignificantDbl(Value + i / 100, Digits)
         Debug.Print "Value:" & Str(Value) & " - RoundedToEven:" & Str(RoundToEven) & " - RoundedAwayFromZero:" & Str(RoundAwayFromZero)
     Next
     Debug.Print
@@ -701,9 +701,9 @@ Public Function RoundingSignificantDemo()
     Digits = 4
     
     Debug.Print "Dbl 4"
-    For I = 0 To 10
-        RoundToEven = RoundSignificantDbl(Value + I / 100, Digits, , True)
-        RoundAwayFromZero = RoundSignificantDbl(Value + I / 100, Digits)
+    For i = 0 To 10
+        RoundToEven = RoundSignificantDbl(Value + i / 100, Digits, , True)
+        RoundAwayFromZero = RoundSignificantDbl(Value + i / 100, Digits)
         Debug.Print "Value:" & Str(Value) & " - RoundedToEven:" & Str(RoundToEven) & " - RoundedAwayFromZero:" & Str(RoundAwayFromZero)
     Next
     Debug.Print
@@ -712,9 +712,9 @@ Public Function RoundingSignificantDemo()
     Digits = 14
     
     Debug.Print "Dbl 14"
-    For I = 0 To 10
-        RoundToEven = RoundSignificantDbl(Value + I * 10 ^ 300 / 100, Digits, , True)
-        RoundAwayFromZero = RoundSignificantDbl(Value + I * 10 ^ 300 / 100, Digits)
+    For i = 0 To 10
+        RoundToEven = RoundSignificantDbl(Value + i * 10 ^ 300 / 100, Digits, , True)
+        RoundAwayFromZero = RoundSignificantDbl(Value + i * 10 ^ 300 / 100, Digits)
         Debug.Print "Value:" & Str(Value) & " - RoundedToEven:" & Str(RoundToEven) & " - RoundedAwayFromZero:" & Str(RoundAwayFromZero)
     Next
     Debug.Print
@@ -723,9 +723,9 @@ Public Function RoundingSignificantDemo()
     Digits = 4
     
     Debug.Print "Dbl 4"
-    For I = 0 To 10
-        RoundToEven = RoundSignificantDbl(Value + I * 10 ^ 300 / 100, Digits, , True)
-        RoundAwayFromZero = RoundSignificantDbl(Value + I * 10 ^ 300 / 100, Digits)
+    For i = 0 To 10
+        RoundToEven = RoundSignificantDbl(Value + i * 10 ^ 300 / 100, Digits, , True)
+        RoundAwayFromZero = RoundSignificantDbl(Value + i * 10 ^ 300 / 100, Digits)
         Debug.Print "Value:" & Str(Value) & " - RoundedToEven:" & Str(RoundToEven) & " - RoundedAwayFromZero:" & Str(RoundAwayFromZero)
     Next
     Debug.Print
@@ -734,9 +734,9 @@ Public Function RoundingSignificantDemo()
     Digits = 8
     
     Debug.Print "Dbl 8"
-    For I = 0 To 10
-        RoundToEven = RoundSignificantDbl(Value + I * 10 ^ -300 / 100, Digits, , True)
-        RoundAwayFromZero = RoundSignificantDbl(Value + I * 10 ^ -300 / 100, Digits)
+    For i = 0 To 10
+        RoundToEven = RoundSignificantDbl(Value + i * 10 ^ -300 / 100, Digits, , True)
+        RoundAwayFromZero = RoundSignificantDbl(Value + i * 10 ^ -300 / 100, Digits)
         Debug.Print "Value:" & Str(Value) & " - RoundedToEven:" & Str(RoundToEven) & " - RoundedAwayFromZero:" & Str(RoundAwayFromZero)
     Next
     Debug.Print
@@ -745,105 +745,11 @@ Public Function RoundingSignificantDemo()
     Digits = 4
     
     Debug.Print "Dbl 4"
-    For I = 0 To 10
-        RoundToEven = RoundSignificantDbl(Value + I * 10 ^ -300 / 100, Digits, , True)
-        RoundAwayFromZero = RoundSignificantDbl(Value + I * 10 ^ -300 / 100, Digits)
+    For i = 0 To 10
+        RoundToEven = RoundSignificantDbl(Value + i * 10 ^ -300 / 100, Digits, , True)
+        RoundAwayFromZero = RoundSignificantDbl(Value + i * 10 ^ -300 / 100, Digits)
         Debug.Print "Value:" & Str(Value) & " - RoundedToEven:" & Str(RoundToEven) & " - RoundedAwayFromZero:" & Str(RoundAwayFromZero)
     Next
     Debug.Print
 
 End Function
-
-' 2018-02-09. Gustav Brock, Cactus Data ApS, CPH.
-'
-Public Function RunRoundingSumDemo()
-
-    Dim Values                  As Variant
-    Dim Value                   As Variant
-    Dim Total                   As Variant
-    Dim RequestedTotal          As Variant
-    Dim Result                  As Variant
-    Dim NumDigitsAfterDecimal   As Long
-    Dim ValuesSum               As Variant
-    Dim RoundedSum              As Variant
-    
-    Dim Tests                   As Variant
-    Dim Test                    As Integer
-    Dim Item                    As Integer
-    
-    ' Select tests to run.
-    Tests = Array(9)
-    
-    For Test = LBound(Tests) To UBound(Tests)
-        RequestedTotal = 0
-        NumDigitsAfterDecimal = 0
-        Select Case Tests(Test)
-            Case 1
-                Values = Array(-1.66, -1.66, -1.67, 1.7, -1.66)
-                RequestedTotal = -11.12
-                NumDigitsAfterDecimal = 1
-            Case 2
-                Values = Array(1.66, 1.66, 1.67, -1.7, 1.66)
-                RequestedTotal = -11.12
-                NumDigitsAfterDecimal = 1
-            Case 3
-                Values = Array(1.333333, -1.333333, 1.333333, 2.333333, 1.33)
-                RequestedTotal = 0
-                NumDigitsAfterDecimal = 1
-            Case 4
-                Values = Array(1.333333, -1.333333, 1.333333, 2.333333, 1.33)
-                RequestedTotal = 5.9
-                NumDigitsAfterDecimal = 1
-            Case 5
-                Values = Array(1.333333, 1.333333, 0, 0, 1.33)
-                RequestedTotal = 4.1
-            Case 6
-                Values = Array(1.333333 * 10 ^ 304, 1.333333 * 10 ^ 304, 0, 0, 1.33 * 10 ^ 304)
-                RequestedTotal = 4.1
-            Case 7
-                Values = Array(433.258, 287.2336, 78.5221, 31198.6551, 4.92236)
-                NumDigitsAfterDecimal = -2
-            Case 8
-                Values = Array(433.258, 287.2336, 78.5221, 31198.6551, 4.92236)
-                RequestedTotal = 10000
-                NumDigitsAfterDecimal = -2
-            Case 9
-                Values = Array(433.258, 287.2336, 78.5221, 31198.6551, 4.92236)
-                RequestedTotal = 10000
-                NumDigitsAfterDecimal = -1
-            Case Else
-                Values = Null
-        End Select
-        If Not IsNull(Values) Then
-            Debug.Print "Item", "Result  <-", "Input", "Rounded", "Difference", "Relative Difference"
-            Total = RequestedTotal
-            ValuesSum = 0
-            RoundedSum = 0
-            Result = RoundSum(Values, Total, NumDigitsAfterDecimal)
-            For Item = LBound(Values) To UBound(Values)
-                If Values(Item) = 0 Then
-                    Value = 0
-                Else
-                    Value = Values(Item)
-                End If
-                Debug.Print _
-                    Item, _
-                    Result(Item), _
-                    Value, _
-                    RoundMid(Value, NumDigitsAfterDecimal), _
-                    RoundMid(Value, NumDigitsAfterDecimal) - Value, _
-                    IIf(Value = 0, 0, (RoundMid(Value, NumDigitsAfterDecimal) - Value) / IIf(Value = 0, 1, Value))
-                ValuesSum = ValuesSum + Value
-                RoundedSum = RoundedSum + RoundMid(Values(Item), NumDigitsAfterDecimal)
-            Next
-            Debug.Print "Test " & Tests(Test), Total, ValuesSum, RoundedSum
-            If RequestedTotal = 0 Then
-                RequestedTotal = ValuesSum
-            End If
-            Debug.Print "Expected:", RoundMid(RequestedTotal, NumDigitsAfterDecimal)
-            Debug.Print
-        End If
-    Next
-
-End Function
-
