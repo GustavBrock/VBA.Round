@@ -1,11 +1,6 @@
 Attribute VB_Name = "RoundingMethodsDemo"
-<<<<<<< HEAD
 ' RoundingMethodsDemo v1.2.3
 ' (c) 2018-03-26. Gustav Brock, Cactus Data ApS, CPH.
-=======
-' RoundingMethodsDemo v1.2.1
-' (c) 2018-03-16. Gustav Brock, Cactus Data ApS, CPH.
->>>>>>> 477f381a4652faae7798a413ba63fefcd5e7b637
 '
 ' https://github.com/GustavBrock/VBA.Round
 '
@@ -68,11 +63,7 @@ Public Sub CheeseCakeSplit()
 
     Const Parts         As Integer = 12
     
-<<<<<<< HEAD
     Dim Players(0 To 6) As Double
-=======
-    Dim Players(1 To 7) As Double
->>>>>>> 477f381a4652faae7798a413ba63fefcd5e7b637
     Dim Shares          As Variant
     
     Dim Points          As Double
@@ -80,7 +71,6 @@ Public Sub CheeseCakeSplit()
     Dim SumSlices       As Double
     Dim RequestedSlices As Integer
 
-<<<<<<< HEAD
     Players(0) = 33
     Players(1) = 9
     Players(2) = 13
@@ -88,22 +78,6 @@ Public Sub CheeseCakeSplit()
     Players(4) = 41
     Players(5) = 11
     Players(6) = 23
-=======
-    Players(1) = 33
-    Players(2) = 9
-    Players(3) = 13
-    Players(4) = 22
-    Players(5) = 41
-    Players(6) = 11
-    Players(7) = 23
-'    Players(1) = 27
-'    Players(2) = 13
-'    Players(3) = 11
-'    Players(4) = 33
-'    Players(5) = 41
-'    Players(6) = 9
-'    Players(7) = 23
->>>>>>> 477f381a4652faae7798a413ba63fefcd5e7b637
     
     For Player = LBound(Players) To UBound(Players)
         Points = Points + Players(Player)
@@ -131,11 +105,7 @@ End Sub
 ' Demo to run a series of example value sets and list
 ' the output from RoundingSum.
 '
-<<<<<<< HEAD
 ' 2018-03-26. Gustav Brock, Cactus Data ApS, CPH.
-=======
-' 2018-03-16. Gustav Brock, Cactus Data ApS, CPH.
->>>>>>> 477f381a4652faae7798a413ba63fefcd5e7b637
 '
 Public Function RunRoundingSumDemo()
 
@@ -160,15 +130,9 @@ Public Function RunRoundingSumDemo()
         NumDigitsAfterDecimal = 0
         Select Case Tests(Test)
             Case 0
-<<<<<<< HEAD
                 Values = Array(33, 4, 15, 22, 3, 3, 7, 15, 22, 30, 3, 4, 15, 22, 31, 1, 7, 15, 22, 33, 3, 4, 15, 22, 33, 3, 7, 15, 22, 33, 3, 4, 15, 22, 33, 1, 7, 15, 22, 33)
                 RequestedTotal = 4
                 NumDigitsAfterDecimal = 0
-=======
-                Values = Array(1.6667, 34.6667, 5.3333, 34.6667, 5.3333, 5.3333, 1.6667, 34.6667)
-                RequestedTotal = 0
-                NumDigitsAfterDecimal = 2
->>>>>>> 477f381a4652faae7798a413ba63fefcd5e7b637
             Case 1
                 Values = Array(-1.66, -1.66, -1.67, 1.7, -1.66)
                 RequestedTotal = -11.12

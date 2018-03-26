@@ -8,7 +8,7 @@ Attribute VB_Name = "RoundingMethodsTest"
 '
 ' License: MIT (http://opensource.org/licenses/mit-license.php)
 
-Option Explicit
+Option Explici 
 
 ' Verify correct Round returns.
 ' Returns True if all tests are passed.
