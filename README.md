@@ -6,6 +6,7 @@ Superior functions for:
 
 * Rounding Currency, Decimal, and Double up, down, by 4/5, or to a specified count of significant figures
 * Rounding \(and scaling\) all items of a series of numbers to have the sum to match a desired rounded total
+* Rounding by the Power of Two (Base 2), up, down, or by 4/5
 
 In many areas, rounding that accurately follows specific rules are needed - accounting, statistics, insurance, etc.
 
@@ -15,10 +16,10 @@ However, often precision is mandatory, and with the speed of computers today, a 
 
 They cover the normal rounding methods:
 
-* Round down, with the option to round negative values towards zero
-* Round up, with the option to round negative values away from zero
-* Round by 4/5, either away from zero or to even  \(Banker's Rounding\)
-* Round to a count of significant figures
+* Round down, with the option to round negative values towards zero. Base 10 and Base 2
+* Round up, with the option to round negative values away from zero. Base 10 and Base 2
+* Round by 4/5, either away from zero (Base 10 and Base 2) or to even  \(Banker's Rounding\). Base 10
+* Round to a count of significant figures. Base 10
 
 The first three functions accept all the numeric data types.  
 The forth exists in three varieties - for Currency, Decimal, and Double respectively.
@@ -45,3 +46,5 @@ Documentation is in-line. Articles on the topic can be found here:
 
 [Round elements of a sum to match a total](https://www.experts-exchange.com/articles/31683/Round-elements-of-a-sum-to-match-a-total.html)
 
+[Round by the power of two]
+(https://www.experts-exchange.com/articles/31859/Round-by-the-power-of-two.html)

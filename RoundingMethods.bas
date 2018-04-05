@@ -1,11 +1,12 @@
 Attribute VB_Name = "RoundingMethods"
-' RoundingMethods v1.2.3
-' (c) 2018-03-26. Gustav Brock, Cactus Data ApS, CPH
+' RoundingMethods v1.3.1
+' (c) 2018-04-05. Gustav Brock, Cactus Data ApS, CPH
 ' https://github.com/GustavBrock/VBA.Round
 '
 ' Set of functions for rounding Currency, Decimal, and Double
 ' up, down, by 4/5, to a specified count of significant figures,
 ' or as a sum.
+' Also, functions for rounding with the power of two.
 '
 ' License: MIT (http://opensource.org/licenses/mit-license.php)
 
@@ -13,7 +14,16 @@ Option Explicit
 
 ' Common constants.
 '
+Public Const Base2      As Double = 2
 Public Const Base10     As Double = 10
+
+' Enums.
+'
+Public Enum rmRoundingMethod
+    Down = -1
+    Midpoint = 0
+    Up = 1
+End Enum
 
 ' Returns Log 10 of Value.
 '
@@ -35,6 +45,29 @@ Public Function Log10( _
     '     End If
     
     Log10 = Log(Value) / Log(Base10)
+
+End Function
+
+' Returns Log 2 of Value.
+'
+' 2018-02-20. Gustav Brock, Cactus Data ApS, CPH.
+'
+Public Function Log2( _
+    ByVal Value As Double) _
+    As Double
+
+    ' No error handling as this should be handled
+    ' outside this function.
+    '
+    ' Example:
+    '
+    '     If MyValue > 0 then
+    '         LogMyValue = Log2(MyValue)
+    '     Else
+    '         ' Do something else ...
+    '     End If
+    
+    Log2 = Log(Value) / Log(Base2)
 
 End Function
 
@@ -76,7 +109,7 @@ Public Function RoundDown( _
             Scaling = 1
         End If
         If Scaling = 0 Then
-            ' A very large value for Digits has minimized scaling.
+            ' A very large value for NumDigitsAfterDecimal has minimized scaling.
             ' Return Value as is.
             ReturnValue = Value
         ElseIf RoundingToZero = False Then
@@ -163,7 +196,7 @@ Public Function RoundMid( _
         Scaling = CDec(Base10 ^ NumDigitsAfterDecimal)
         
         If Scaling = 0 Then
-            ' A very large value for Digits has minimized scaling.
+            ' A very large value for NumDigitsAfterDecimal has minimized scaling.
             ' Return Value as is.
             ReturnValue = Value
         ElseIf MidwayRoundingToEven Then
@@ -254,7 +287,7 @@ Public Function RoundUp( _
             Scaling = 1
         End If
         If Scaling = 0 Then
-            ' A very large value for Digits has minimized scaling.
+            ' A very large value for NumDigitsAfterDecimal has minimized scaling.
             ' Return Value as is.
             ReturnValue = Value
         ElseIf RoundingAwayFromZero = False Or Value > 0 Then
@@ -812,3 +845,561 @@ Public Function RoundSum( _
     RoundSum = RoundedValues
     
 End Function
+
+' Rounds Value down to the power of two as specified with parameter Exponent.
+'
+' If Exponent is positive, the fraction of Value is rounded to an integer a fraction of 1 / 2 ^ Exponent.
+' If Exponent is zero, Value is rounded to an integer.
+' If Exponent is negative, Value is rounded to an integer and a multiplum of 2 ^ Exponent.
+'
+' Optionally, rounds negative values towards zero.
+'
+' Rounds correctly Value until max/min value limited by a scaling of 2 raised to the power of Exponent.
+'
+' Smallest fraction for rounding is:
+'   2 ^ -21 (= 1 / 2097152)
+' or:
+'   0.000000476837158203125
+'
+' Largest numerical value to round with maximum resolution is:
+'   79228162 + (2 ^ 21 - 8) / 2 ^ 21
+' or:
+'   79228162.999996185302734375
+'
+' Expected rounded value must not exceed the range of:
+'   +/- 79,228,162,514,264,337,593,543,950,335
+'
+' Uses CDec() to prevent bit errors of reals.
+'
+' Execution time is about 0.5탎 for rounding to integer, else about 1탎.
+'
+' Examples, integers:
+'   RoundDownBase2(1001, -3)                -> 1000
+'   RoundDownBase2(1001, -8)                ->  768
+'   RoundDownBase2(17.03, -4)               ->   16
+'   RoundDownBase2(17.03, -5)               ->    0
+'
+' Examples, decimals:
+'   1 / 2 ^ 4 = 0.0625                                  Step value when rounding by 1/16
+'   RoundDownBase2(17.03, 4)                -> 17
+'   RoundDownBase2(17.08, 4)                -> 17.0625
+'   RoundDownBase2(17.1, 4)                 -> 17.0625
+'   RoundDownBase2(17.2, 4)                 -> 17.1875
+'
+'   1 / 2 ^ 5 = 0.03125                                 Step value when rounding by 1/32
+'   RoundDownBase2(17.125 + 0.00000, 4)     -> 17.125   Exact value. No rounding.
+'   RoundDownBase2(17.125 + 0.03124, 4)     -> 17.125
+'   RoundDownBase2(17.125 + 0.03125, 4)     -> 17.125
+'
+' More info on the power of two and rounding:
+'   https://en.wikipedia.org/wiki/Power_of_two
+'
+' 2018-04-02. Gustav Brock, Cactus Data ApS, CPH.
+'
+Public Function RoundDownBase2( _
+    ByVal Value As Variant, _
+    Optional ByVal Exponent As Long, _
+    Optional ByVal RoundingToZero As Boolean) _
+    As Variant
+    
+    Dim Scaling     As Variant
+    Dim ScaledValue As Variant
+    Dim ReturnValue As Variant
+    
+    ' Only round if Value is numeric and ReturnValue can be different from zero.
+    If Not IsNumeric(Value) Then
+        ' Nothing to do.
+        ReturnValue = Null
+    ElseIf Value = 0 Then
+        ' Nothing to round.
+        ' Return Value as is.
+        ReturnValue = Value
+    Else
+        If Exponent <> 0 Then
+            Scaling = CDec(Base2 ^ Exponent)
+        Else
+            Scaling = 1
+        End If
+        If Scaling = 0 Then
+            ' A very large value for Exponent has minimized scaling.
+            ' Return Value as is.
+            ReturnValue = Value
+        ElseIf RoundingToZero = False Then
+            ' Round numeric value down.
+            If Scaling = 1 Then
+                ' Integer rounding.
+                ReturnValue = Int(Value)
+            Else
+                ' First try with conversion to Decimal to avoid bit errors for some reals like 32.675.
+                ' Very large values for Exponent can cause an out-of-range error when dividing.
+                On Error Resume Next
+                ScaledValue = Int(CDec(Value) * Scaling)
+                ReturnValue = ScaledValue / Scaling
+                If Err.Number <> 0 Then
+                    ' Decimal overflow.
+                    ' Round Value without conversion to Decimal.
+                    ScaledValue = Int(Value * Scaling)
+                    ReturnValue = ScaledValue / Scaling
+                End If
+            End If
+        Else
+            ' Round absolute value down.
+            If Scaling = 1 Then
+                ' Integer rounding.
+                ReturnValue = Fix(Value)
+            Else
+                ' First try with conversion to Decimal to avoid bit errors for some reals like 32.675.
+                ' Very large values for NumDigitsAfterDecimal can cause an out-of-range error when dividing.
+                On Error Resume Next
+                ScaledValue = Fix(CDec(Value) * Scaling)
+                ReturnValue = ScaledValue / Scaling
+                If Err.Number <> 0 Then
+                    ' Decimal overflow.
+                    ' Round Value with no conversion.
+                    ScaledValue = Fix(Value * Scaling)
+                    ReturnValue = ScaledValue / Scaling
+                End If
+            End If
+        End If
+        If Err.Number <> 0 Then
+            ' Rounding failed because values are near one of the boundaries of type Double.
+            ' Return value as is.
+            ReturnValue = Value
+        End If
+    End If
+    
+    RoundDownBase2 = ReturnValue
+
+End Function
+
+' Rounds Value by 4/5 to the power of two as specified with parameter Exponent.
+'
+' If Exponent is positive, the fraction of Value is rounded to an integer a fraction of 1 / 2 ^ Exponent.
+' If Exponent is zero, Value is rounded to an integer.
+' If Exponent is negative, Value is rounded to an integer and a multiplum of 2 ^ Exponent.
+'
+' Rounds correctly Value until max/min value limited by a scaling of 2 raised to the power of Exponent.
+'
+' Smallest fraction for rounding is:
+'   2 ^ -21 (= 1 / 2097152)
+' or:
+'   0.000000476837158203125
+'
+' Largest numerical value to round with maximum resolution is:
+'   79228162 + (2 ^ 21 - 8) / 2 ^ 21
+' or:
+'   79228162.999996185302734375
+'
+' Expected rounded value must not exceed the range of:
+'   +/- 79,228,162,514,264,337,593,543,950,335
+'
+' Uses CDec() to prevent bit errors of reals.
+'
+' Execution time is about 1탎.
+'
+' Examples, integers:
+'   RoundMidBase2(1001, -3)             -> 1000
+'   RoundMidBase2(1001, -8)             -> 1024
+'   RoundMidBase2(17.03, -4)            ->   16
+'   RoundMidBase2(17.03, -5)            ->   32
+'
+' Examples, decimals:
+'   1 / 2 ^ 4 = 0.0625                              Step value when rounding by 1/16
+'   RoundMidBase2(17.03, 4)             -> 17.0     Rounding down
+'   RoundMidBase2(17.08, 4)             -> 17.0625  Rounding down
+'   RoundMidBase2(17.1, 4)              -> 17.125   Rounding up
+'   RoundMidBase2(17.2, 4)              -> 17.1875  Rounding up
+'
+'   1 / 2 ^ 5 = 0.03125                             Step value when rounding by 1/32
+'   RoundMidBase2(17.125 + 0.00000, 4)  -> 17.125   Exact value. No rounding.
+'   RoundMidBase2(17.125 + 0.03124, 4)  -> 17.125   Rounding down
+'   RoundMidBase2(17.125 + 0.03125, 4)  -> 17.1875  Rounding up
+'
+' More info on the power of two and rounding:
+'   https://en.wikipedia.org/wiki/Power_of_two
+'
+' 2018-04-01. Gustav Brock, Cactus Data ApS, CPH.
+'
+Public Function RoundMidBase2( _
+    ByVal Value As Variant, _
+    Optional ByVal Exponent As Long) _
+    As Variant
+
+    Dim Scaling     As Variant
+    Dim Half        As Variant
+    Dim ScaledValue As Variant
+    Dim ReturnValue As Variant
+    
+    ' Only round if Value is numeric and ReturnValue can be different from zero.
+    If Not IsNumeric(Value) Then
+        ' Nothing to do.
+        ReturnValue = Null
+    ElseIf Value = 0 Then
+        ' Nothing to round.
+        ' Return Value as is.
+        ReturnValue = Value
+    Else
+        Scaling = CDec(Base2 ^ Exponent)
+        
+        If Scaling = 0 Then
+            ' A very large value for exponent has minimized scaling.
+            ' Return Value as is.
+            ReturnValue = Value
+        Else
+            ' Standard 4/5 rounding.
+            ' Very large values for Exponent can cause an out-of-range error when dividing.
+            On Error Resume Next
+            Half = CDec(0.5)
+            If Value > 0 Then
+                ScaledValue = Int(CDec(Value) * Scaling + Half)
+            Else
+                ScaledValue = -Int(-CDec(Value) * Scaling + Half)
+            End If
+            ReturnValue = ScaledValue / Scaling
+            If Err.Number <> 0 Then
+                ' Decimal overflow.
+                ' Round Value without conversion to Decimal.
+                Half = CDbl(0.5)
+                If Value > 0 Then
+                    ScaledValue = Int(Value * Scaling + Half)
+                Else
+                    ScaledValue = -Int(-Value * Scaling + Half)
+                End If
+                ReturnValue = ScaledValue / Scaling
+            End If
+        End If
+        If Err.Number <> 0 Then
+            ' Rounding failed because values are near one of the boundaries of type Double.
+            ' Return value as is.
+            ReturnValue = Value
+        End If
+    End If
+    
+    RoundMidBase2 = ReturnValue
+
+End Function
+
+' Rounds Value up to the power of two as specified with parameter Exponent.
+'
+' If Exponent is positive, the fraction of Value is rounded to an integer a fraction of 1 / 2 ^ Exponent.
+' If Exponent is zero, Value is rounded to an integer.
+' If Exponent is negative, Value is rounded to an integer and a multiplum of 2 ^ Exponent.
+'
+' Optionally, rounds negative values away from zero.
+'
+' Rounds correctly Value until max/min value limited by a scaling of 2 raised to the power of Exponent.
+'
+' Smallest fraction for rounding is:
+'   2 ^ -21 (= 1 / 2097152)
+' or:
+'   0.000000476837158203125
+'
+' Largest numerical value to round with maximum resolution is:
+'   79228162 + (2 ^ 21 - 8) / 2 ^ 21
+' or:
+'   79228162.999996185302734375
+'
+' Expected rounded value must not exceed the range of:
+'   +/- 79,228,162,514,264,337,593,543,950,335
+'
+' Uses CDec() to prevent bit errors of reals.
+'
+' Execution time is about 0.5탎 for rounding to integer, else about 1탎.
+'
+' Examples, integers:
+'   RoundUpBase2(1001, -3)              -> 1008
+'   RoundUpBase2(1001, -8)              -> 1024
+'   RoundUpBase2(17.03, -4)             ->   32
+'   RoundUpBase2(17.03, -5)             ->   32
+'
+' Examples, decimals:
+'   1 / 2 ^ 4 = 0.0625                              Step value when rounding by 1/16
+'   RoundUpBase2(17.03, 4)              -> 17.0625
+'   RoundUpBase2(17.08, 4)              -> 17.125
+'   RoundUpBase2(17.1, 4)               -> 17.125
+'   RoundUpBase2(17.2, 4)               -> 17.25
+'
+'   1 / 2 ^ 5 = 0.03125                             Step value when rounding by 1/32
+'   RoundUpBase2(17.125 + 0.00000, 4)   -> 17.125   Exact value. No rounding.
+'   RoundUpBase2(17.125 + 0.03124, 4)   -> 17.1875
+'   RoundUpBase2(17.125 + 0.03125, 4)   -> 17.1875
+'
+' More info on the power of two and rounding:
+'   https://en.wikipedia.org/wiki/Power_of_two
+'
+' 2018-04-02. Gustav Brock, Cactus Data ApS, CPH.
+'
+Public Function RoundUpBase2( _
+    ByVal Value As Variant, _
+    Optional ByVal Exponent As Long, _
+    Optional ByVal RoundingAwayFromZero As Boolean) _
+    As Variant
+
+    Dim Scaling     As Variant
+    Dim ScaledValue As Variant
+    Dim ReturnValue As Variant
+    
+    ' Only round if Value is numeric and ReturnValue can be different from zero.
+    If Not IsNumeric(Value) Then
+        ' Nothing to do.
+        ReturnValue = Null
+    ElseIf Value = 0 Then
+        ' Nothing to round.
+        ' Return Value as is.
+        ReturnValue = Value
+    Else
+        If Exponent <> 0 Then
+            Scaling = CDec(Base2 ^ Exponent)
+        Else
+            Scaling = 1
+        End If
+        If Scaling = 0 Then
+            ' A very large value for Exponent has minimized scaling.
+            ' Return Value as is.
+            ReturnValue = Value
+        ElseIf RoundingAwayFromZero = False Or Value > 0 Then
+            ' Round numeric value up.
+            If Scaling = 1 Then
+                ' Integer rounding.
+                ReturnValue = -Int(-Value)
+            Else
+                ' First try with conversion to Decimal to avoid bit errors for some reals like 32.675.
+                On Error Resume Next
+                ScaledValue = -Int(CDec(-Value) * Scaling)
+                ReturnValue = ScaledValue / Scaling
+                If Err.Number <> 0 Then
+                    ' Decimal overflow.
+                    ' Round Value without conversion to Decimal.
+                    ScaledValue = -Int(-Value * Scaling)
+                    ReturnValue = ScaledValue / Scaling
+                End If
+            End If
+        Else
+            ' Round absolute value up.
+            If Scaling = 1 Then
+                ' Integer rounding.
+                ReturnValue = Int(Value)
+            Else
+                ' First try with conversion to Decimal to avoid bit errors for some reals like 32.675.
+                On Error Resume Next
+                ScaledValue = Int(CDec(Value) * Scaling)
+                ReturnValue = ScaledValue / Scaling
+                If Err.Number <> 0 Then
+                    ' Decimal overflow.
+                    ' Round Value without conversion to Decimal.
+                    ScaledValue = Int(Value * Scaling)
+                    ReturnValue = ScaledValue / Scaling
+                End If
+            End If
+        End If
+        If Err.Number <> 0 Then
+            ' Rounding failed because values are near one of the boundaries of type Double.
+            ' Return value as is.
+            ReturnValue = Value
+        End If
+    End If
+    
+    RoundUpBase2 = ReturnValue
+
+End Function
+
+' Rounds and converts a decimal value to an integer and the fraction of an integer
+' using 4/5 midpoint rounding, optionally rounding up or down.
+'
+' Rounding method is determined by parameter RoundingMethod.
+' For rounding up or down, rounding of negative values can optionally be set to
+' away-from-zero or towards-zero respectively by parameter RoundingAsAbsolute.
+'
+' Returns the rounded value as a decimal.
+' Returns numerator and denominator of the fraction by reference.
+'
+' For general examples, see function RoundMidBase2, RoundUpBase2, and RoundDownBase2.
+'
+' Will, for example, convert decimal inches to integer inches and a fraction of inches.
+' However, numerator and denominator of the fraction are returned by reference in the
+' parameters Numerator and Denominator for the value to be formatted as text by the
+' calling procedure.
+'
+' Example:
+'   Value = 7.22
+'   Exponent = 2    ' will round to 1/4.
+'   Numerator = 0
+'   Denominator = 0
+'
+'   Result = ConvertDecimalFractions(Value, Exponent, Numerator, Denominator)
+'
+'   Result = 7.25
+'   Numerator = 1
+'   Denominator = 4
+'
+'   Result = ConvertDecimalFractions(Value, Exponent, Numerator, Denominator, Up)
+'
+'   Result = 7.25
+'   Numerator = 1
+'   Denominator = 4
+'
+'   Result = ConvertDecimalFractions(Value, Exponent, Numerator, Denominator, Down)
+'
+'   Result = 7
+'   Numerator = 0
+'   Denominator = 0
+'
+' If negative, parameter Exponent determines the rounding of the fraction as
+' 1 / 2 ^ Exponent with a maximum of 21 - or from 1 / 2 to 1 / 2097152.
+' For inches, that is a range from 12.7 mm to about 12.1 nm.
+'
+' If zero or positive, parameter Exponent determines the rounding of the
+' integer value with 2 ^ Exponent with a maximum of 21 - or from 1 to 2097152.
+' For inches, that is a range from 25.4 mm to about 53.27 km.
+'
+' Also, se comments for the required functions:
+'
+'   RoundUpBase2
+'   RoundMidBase2
+'   RoundDownBase2
+'
+' 2018-04-05. Gustav Brock, Cactus Data ApS, CPH.
+'
+Public Function ConvertDecimalFractions( _
+    ByVal Value As Variant, _
+    ByVal Exponent As Integer, _
+    Optional ByRef Numerator As Long, _
+    Optional ByRef Denominator As Long, _
+    Optional RoundingMethod As rmRoundingMethod = Midpoint, _
+    Optional RoundingAsAbsolute As Boolean) _
+    As Variant
+    
+    Dim Number      As Variant
+    Dim Fraction    As Variant
+    
+    ' Validate rounding method.
+    Select Case RoundingMethod
+        Case Up, Midpoint, Down
+            ' OK.
+        Case Else
+            ' Use default rounding method.
+            RoundingMethod = Midpoint
+    End Select
+    
+    If Exponent <= 0 Then
+        ' Integer rounding only.
+        Select Case RoundingMethod
+            Case Up
+                Number = RoundUpBase2(Value, Exponent, RoundingAsAbsolute)
+            Case Midpoint
+                Number = RoundMidBase2(Value, Exponent)
+            Case Down
+                Number = RoundDownBase2(Value, Exponent, RoundingAsAbsolute)
+        End Select
+        Fraction = 0
+        Numerator = 0
+        Denominator = 0
+    Else
+        ' Rounding with fractions.
+        Number = Fix(CDec(Value))
+        Select Case RoundingMethod
+            Case Up
+                Fraction = RoundUpBase2(Value - Number, Exponent, RoundingAsAbsolute)
+            Case Midpoint
+                Fraction = RoundMidBase2(Value - Number, Exponent)
+            Case Down
+                Fraction = RoundDownBase2(Value - Number, Exponent, RoundingAsAbsolute)
+        End Select
+        
+        If Fraction = 0 Or Abs(Fraction) = 1 Then
+            ' Fraction has been rounded to 0 or +/-1.
+            Numerator = 0
+            Denominator = 0
+        Else
+            ' Calculate numerator and denominator for the fraction.
+            Denominator = Base2 ^ Exponent
+            Numerator = Fraction * Denominator
+            ' Find the smallest denominator.
+            While Numerator Mod Base2 = 0
+                Numerator = Numerator / Base2
+                Denominator = Denominator / Base2
+            Wend
+        End If
+    End If
+    
+    ConvertDecimalFractions = Number + Fraction
+    
+End Function
+
+' Rounds a value and prints the result in its Base 2 components
+' and as a decimal value, and in a integer-fraction format.
+'
+' Will accept values within +/- 2 ^ 96.
+' Also, se comments for the required functions:
+'
+'   ConvertDecimalFractions
+'   RoundMidBase2
+'   Log2
+'
+' Example:
+'
+'   DebugBase2 746.873, 2
+'   Exponent      2 ^ Exponent  Factor        Value         Fraction
+'    9             512           1             512
+'    8             256           0             0
+'    7             128           1             128
+'    6             64            1             64
+'    5             32            1             32
+'    4             16            0             0
+'    3             8             1             8
+'    2             4             0             0
+'    1             2             1             2
+'    0             1             0             0
+'   Total:                                     746          3/4
+'   Decimal:                                   746,75
+'
+' 2018-03-09. Gustav Brock, Cactus Data ApS, CPH.
+'
+Public Sub DebugBase2( _
+    ByVal Value As Variant, _
+    Optional ByVal Exponent As Long)
+    
+    ' Maximum possible exponent.
+    Const MaxExponent2  As Long = 96
+
+    Dim Exponent2       As Long
+    Dim Number          As Variant
+    Dim Rounded         As Variant
+    Dim Factor          As Long
+    Dim Sign            As Long
+    Dim Numerator       As Long
+    Dim Denominator     As Long
+
+    If Not IsNumeric(Value) Then Exit Sub
+    Sign = Sgn(Value)
+    If Sign = 0 Then Exit Sub
+    
+    Number = CDec(Fix(Abs(Value)))
+    
+    ' Split and print the integer part.
+    Debug.Print "Exponent", "2 ^ Exponent", "Factor", "Value", "Fraction"
+    If Number > 0 Then
+        ' Print each bit and value.
+        For Exponent2 = Int(Log2(Number)) To 0 Step -1
+            If Exponent2 = MaxExponent2 Then
+                ' Cannot perform further calculation.
+                Factor = 1
+                Number = 0
+            Else
+                Factor = Int(Number / CDec(Base2 ^ Exponent2))
+                Number = Number - CDec(Factor * Base2 ^ Exponent2)
+            End If
+            Debug.Print Exponent2, Base2 ^ Exponent2, Factor, Sign * Factor * Base2 ^ Exponent2
+        Next
+    Else
+        ' Print zero values.
+        Debug.Print 0, 0, 0, 0
+    End If
+    
+    ' Find and print the fraction.
+    Rounded = ConvertDecimalFractions(Value, Exponent, Numerator, Denominator)
+    Debug.Print "Total:", , , CDec(Fix(Value)), Numerator & "/" & Denominator
+    Debug.Print "Decimal:", , , Rounded
+    
+End Sub
+
