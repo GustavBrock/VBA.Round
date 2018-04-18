@@ -1,4 +1,4 @@
-﻿# VBA.Round
+# VBA.Round
 
 ### Introduction
 

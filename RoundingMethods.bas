@@ -1,12 +1,15 @@
 Attribute VB_Name = "RoundingMethods"
-' RoundingMethods v1.3.1
-' (c) 2018-04-05. Gustav Brock, Cactus Data ApS, CPH
+' RoundingMethods v1.3.2
+' (c) 2018-04-09. Gustav Brock, Cactus Data ApS, CPH
 ' https://github.com/GustavBrock/VBA.Round
 '
 ' Set of functions for rounding Currency, Decimal, and Double
 ' up, down, by 4/5, to a specified count of significant figures,
 ' or as a sum.
-' Also, functions for rounding with the power of two.
+'
+' Set of functions for rounding Currency, Decimal, and Double
+' up, down, or by 4/5 with the power of two and debugging, and
+' for converting decimal numbers to integers and fractions.
 '
 ' License: MIT (http://opensource.org/licenses/mit-license.php)
 
@@ -14,6 +17,7 @@ Option Explicit
 
 ' Common constants.
 '
+' Base values.
 Public Const Base2      As Double = 2
 Public Const Base10     As Double = 10
 
@@ -1008,7 +1012,7 @@ End Function
 '   RoundMidBase2(17.03, 4)             -> 17.0     Rounding down
 '   RoundMidBase2(17.08, 4)             -> 17.0625  Rounding down
 '   RoundMidBase2(17.1, 4)              -> 17.125   Rounding up
-'   RoundMidBase2(17.2, 4)              -> 17.1875  Rounding up
+'   RoundMidBase2(17.2, 4)              -> 17.1875  Rounding down
 '
 '   1 / 2 ^ 5 = 0.03125                             Step value when rounding by 1/32
 '   RoundMidBase2(17.125 + 0.00000, 4)  -> 17.125   Exact value. No rounding.
@@ -1018,7 +1022,7 @@ End Function
 ' More info on the power of two and rounding:
 '   https://en.wikipedia.org/wiki/Power_of_two
 '
-' 2018-04-01. Gustav Brock, Cactus Data ApS, CPH.
+' 2018-04-05. Gustav Brock, Cactus Data ApS, CPH.
 '
 Public Function RoundMidBase2( _
     ByVal Value As Variant, _
