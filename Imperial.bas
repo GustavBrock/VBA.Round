@@ -1,6 +1,6 @@
 Attribute VB_Name = "Imperial"
-' Imperial v1.0.3
-' (c) 2018-04-13. Gustav Brock, Cactus Data ApS, CPH
+' Imperial v1.0.4
+' (c) 2018-04-19. Gustav Brock, Cactus Data ApS, CPH
 ' https://github.com/GustavBrock/VBA.Round
 '
 ' Set of functions for converting between imperial and metric measures
@@ -332,7 +332,13 @@ End Function
 ' Smallest reliably parsed value is the fraction 1/2097152
 ' or the decimal value 0.000000476837158203125.
 '
-' 2018-04-13. Gustav Brock, Cactus Data ApS, CPH.
+' Requires when not used in Access, for example Excel,
+' either:
+'   Module Access
+' or a reference to Access, for example for Access 2016:
+'   Microsoft Access 16.0 Object Library
+'
+' 2018-04-19. Gustav Brock, Cactus Data ApS, CPH.
 '
 Public Function ParseFeetInches( _
     ByVal Expression As String) _
