@@ -15,7 +15,8 @@ Also:
 
 
 ## General rounding
-![](../images/EE Round.png)
+
+![General](https://raw.githubusercontent.com/GustavBrock/VBA.Round/master/images/EE%20Round.png)
 
 In many areas, rounding that accurately follows specific rules are needed - accounting, statistics, insurance, etc.
 
@@ -38,13 +39,13 @@ All functions accept a specified count of decimals - including a negative count 
 
 ## Rounding a series of numbers to a sum
 
-![Rounding a series of numbers to a sum](/images/EE Slices.png)
+![Rounding a series of numbers to a sum](https://raw.githubusercontent.com/GustavBrock/VBA.Round/master/images/EE%20Slices.png)
 
 The function **RoundSum** will round a series of numbers, so the sum of these matches the rounded sum of the unrounded values. Further, if a requested total is passed, the rounded values will be _scaled_, so the sum of these matches the rounded total. In cases where the sum of the rounded values doesn't match the rounded total, the rounded values will be adjusted where the applied error will be the relatively smallest.
 
 ## Rounding by a power of two
 
-![Rounding by a power of two](/images/EE Power 2.png)
+![Rounding by a power of two](https://raw.githubusercontent.com/GustavBrock/VBA.Round/master/images/EE%20Power%202.png)
 
 This will not round by:
 
@@ -58,7 +59,7 @@ again, with extreme precision (down to 2<sup>-21</sup>) and including very small
 
 ## Converting between meters and inches
 
-![Converting between meters and inches](/images/EE Imperial.png)
+![Converting between meters and inches](https://raw.githubusercontent.com/GustavBrock/VBA.Round/master/images/EE%20Imperial.png)
 
 A practical usage of *rounding by the power of two* is to convert back and forth between metric and imperial measures:
 
@@ -97,12 +98,12 @@ Detailed documentation is in-line.
 
 Articles on the topic can be found here:
  
-![CP Logo](/images/CP Logo Small.png)
+![CP Logo](https://raw.githubusercontent.com/GustavBrock/VBA.Round/master/images/CP%20Logo%20Small.png)
 
 [Rounding values up, down, by 4/5, or to significant figures](http://www.codeproject.com/Tips/1022704/Rounding-Values-Up-Down-By-Or-To-Significant-Figur)
 
 
-![EE Logo](/images/EE Logo.png)
+![EE Logo](https://raw.githubusercontent.com/GustavBrock/VBA.Round/master/images/EE%20Logo.png)
  
 [Rounding values up, down, by 4/5, or to significant figures](https://www.experts-exchange.com/articles/20299/Rounding-values-up-down-by-4-5-or-to-significant-figures.html)
 
