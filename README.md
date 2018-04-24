@@ -15,7 +15,7 @@ Also:
 
 
 ## General rounding
-![General Rounding](/images/EE Round.png)
+![General Rounding](VBA.Round/images/EE Round.png)
 
 In many areas, rounding that accurately follows specific rules are needed - accounting, statistics, insurance, etc.
 
