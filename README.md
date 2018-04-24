@@ -15,7 +15,7 @@ Also:
 
 
 ## General rounding
-![](../../../../../CD_Test12/Round/EE Round.png)
+![General Rounding](/images/EE Round.png)
 
 In many areas, rounding that accurately follows specific rules are needed - accounting, statistics, insurance, etc.
 
@@ -38,12 +38,13 @@ All functions accept a specified count of decimals - including a negative count 
 
 ## Rounding a series of numbers to a sum
 
-![](../../../../../CD_Test12/Round/EE Slices.png)
+![Rounding a series of numbers to a sum](/images/EE Slices.png)
+
 The function **RoundSum** will round a series of numbers, so the sum of these matches the rounded sum of the unrounded values. Further, if a requested total is passed, the rounded values will be _scaled_, so the sum of these matches the rounded total. In cases where the sum of the rounded values doesn't match the rounded total, the rounded values will be adjusted where the applied error will be the relatively smallest.
 
 ## Rounding by a power of two
 
-![](../../../../../CD_Test12/Round/EE Power 2.png)
+![Rounding by a power of two](/images/EE Power 2.png)
 
 This will not round by:
 
@@ -57,7 +58,7 @@ again, with extreme precision (down to 2<sup>-21</sup>) and including very small
 
 ## Converting between meters and inches
 
-![](../../../../../CD_Test12/Round/EE Imperial.png)
+![Converting between meters and inches](/images/EE Imperial.png)
 
 A practical usage of *rounding by the power of two* is to convert back and forth between metric and imperial measures:
 
@@ -96,12 +97,12 @@ Detailed documentation is in-line.
 
 Articles on the topic can be found here:
  
-![](../../../../../CD_Test12/Round/CP Logo Small.png)
+![CP Logo](/images/CP Logo Small.png)
 
 [Rounding values up, down, by 4/5, or to significant figures](http://www.codeproject.com/Tips/1022704/Rounding-Values-Up-Down-By-Or-To-Significant-Figur)
 
 
-![](../../../../../CD_Test12/Round/EE Logo.png)
+![EE Logo](/images/EE Logo.png)
  
 [Rounding values up, down, by 4/5, or to significant figures](https://www.experts-exchange.com/articles/20299/Rounding-values-up-down-by-4-5-or-to-significant-figures.html)
 
