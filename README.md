@@ -112,3 +112,11 @@ Articles on the topic can be found here:
 [Round by the power of two](https://www.experts-exchange.com/articles/31859/Round-by-the-power-of-two.html)
 
 [Convert and format imperial distance (feet and inches) with high precision](https://www.experts-exchange.com/articles/31931/Convert-and-format-imperial-distance-feet-and-inches-with-high-precision.html)
+
+<hr>
+
+*If you wish to support my work or need extended support or advice, feel free to:*
+
+<p>
+
+[<img src="https://raw.githubusercontent.com/GustavBrock/VBA.Round/master/images/BuyMeACoffee.png">](https://www.buymeacoffee.com/gustav/)
