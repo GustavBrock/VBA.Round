@@ -107,13 +107,13 @@ Articles on the topic can be found here:
 
 ![EE Logo](https://raw.githubusercontent.com/GustavBrock/VBA.Round/master/images/EE%20Logo.png)
  
-[Rounding values up, down, by 4/5, or to significant figures](https://www.experts-exchange.com/articles/20299/Rounding-values-up-down-by-4-5-or-to-significant-figures.html)
+[Rounding values up, down, by 4/5, or to significant figures](https://www.experts-exchange.com/articles/20299/Rounding-values-up-down-by-4-5-or-to-significant-figures.html?preview=9KH3diMD6vc%3D)
 
-[Round elements of a sum to match a total](https://www.experts-exchange.com/articles/31683/Round-elements-of-a-sum-to-match-a-total.html)
+[Round elements of a sum to match a total](https://www.experts-exchange.com/articles/31683/Round-elements-of-a-sum-to-match-a-total.html?preview=175fPXbOqV8%3D)
 
-[Round by the power of two](https://www.experts-exchange.com/articles/31859/Round-by-the-power-of-two.html)
+[Round by the power of two](https://www.experts-exchange.com/articles/31859/Round-by-the-power-of-two.html?preview=ncnDzAvJwPY%3D)
 
-[Convert and format imperial distance (feet and inches) with high precision](https://www.experts-exchange.com/articles/31931/Convert-and-format-imperial-distance-feet-and-inches-with-high-precision.html)
+[Convert and format imperial distance (feet and inches) with high precision](https://www.experts-exchange.com/articles/31931/Convert-and-format-imperial-distance-feet-and-inches-with-high-precision.html?preview=TbXtlf8IKMA%3D)
 
 <hr>
 
