@@ -1,7 +1,6 @@
 Attribute VB_Name = "RoundingMethodsTest"
 ' RoundingMethodsTest v1.2.1
 ' (c) 2018-03-16. Gustav Brock, Cactus Data ApS, CPH.
-'
 ' https://github.com/GustavBrock/VBA.Round
 '
 ' Test function to list rounding of example values.

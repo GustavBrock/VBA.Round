@@ -1,11 +1,14 @@
 Attribute VB_Name = "RoundingMethods"
-' RoundingMethods v1.3.2
-' (c) 2018-04-09. Gustav Brock, Cactus Data ApS, CPH
+' RoundingMethods v1.4.0
+' (c) 2019-11-05. Gustav Brock, Cactus Data ApS, CPH
 ' https://github.com/GustavBrock/VBA.Round
 '
 ' Set of functions for rounding Currency, Decimal, and Double
 ' up, down, by 4/5, to a specified count of significant figures,
 ' or as a sum.
+'
+' Set of functions for rounding Currency up, down, or by 4/5 by
+' a value.
 '
 ' Set of functions for rounding Currency, Decimal, and Double
 ' up, down, or by 4/5 with the power of two and debugging, and
@@ -586,6 +589,148 @@ Public Function RoundSignificantDbl( _
     End If
   
     RoundSignificantDbl = ReturnValue
+
+End Function
+
+' Rounds a value down to the nearest multiplum of a rounding value.
+' If a negative or no rounding value is passed, the value will
+' not be rounded.
+'
+' Accepts any value of data type Currency and a rounding value
+' that will result in a value within the range of Currency.
+'
+' Negative values are rounded to zero or, optionally, away from zero.
+'
+' Examples:
+'
+'   RoundAmountDown(-922337203685477.5808, 0.05)    -> -922337203685477.55
+'   RoundAmountDown( 922337203685477.5807, 0.05)    ->  922337203685477.55
+'   RoundAmountDown( 10, 3)                         ->                9
+'   RoundAmountDown(-10,-3)                         ->               -9
+'   RoundAmountDown( 1.3, 0.2)                      ->                1.2
+'   RoundAmountDown( 122.25, 0.5)                   ->              122
+'   RoundAmountDown( 122.25, 25)                    ->              100
+'   RoundAmountDown(-122.25, 25)                    ->             -100
+'   RoundAmountDown(-122.25, 25, False)             ->             -125
+'   RoundAmountDown( 6.05, 0.1)                     ->                6
+'   RoundAmountDown( 7.05, 0.1)                     ->                7
+
+' 2019-11-05. Gustav Brock, Cactus Data ApS, CPH.
+'
+Public Function RoundAmountDown( _
+    ByVal Value As Currency, _
+    Optional ByVal RoundValue As Currency, _
+    Optional ByVal RoundingAwayFromZero As Boolean) _
+    As Currency
+    
+    Dim BaseValue   As Variant
+    Dim Result      As Currency
+    
+    If RoundValue > 0 Then
+        If RoundingAwayFromZero = False Then
+            ' Round towards zero.
+            BaseValue = Fix(Value / CDec(RoundValue))
+        Else
+            ' Round away from zero.
+            BaseValue = Int(Value / CDec(RoundValue))
+        End If
+        Result = BaseValue * RoundValue
+    Else
+        ' Don't round.
+        Result = Value
+    End If
+    
+    RoundAmountDown = Result
+
+End Function
+
+' Rounds a value by 4/5 to the nearest multiplum of a rounding value.
+' If no rounding value is passed, the value will not be rounded.
+'
+' Accepts any value of data type Currency and a rounding value
+' that will result in a value within the range of Currency.
+'
+' Mimics Excel function MRound without the limitations of this.
+'
+' Examples:
+'
+'   RoundAmountMid(-922337203685477.5808, 0.05)     ->  overflow
+'   RoundAmountMid(-922337203685477.5808, 0.0001)   -> -922337203685477.5808
+'   RoundAmountMid( 922337203685477.5807, 0.05)     ->  overflow
+'   RoundAmountMid( 922337203685477.5807, 0.0001)   ->  922337203685477.5807
+'   RoundAmountMid( 10, 3)                          ->                9
+'   RoundAmountMid(-10,-3)                          ->               -9
+'   RoundAmountMid( 1.3, 0.2)                       ->                1.4
+'   RoundAmountMid( 122.25, 0.5)                    ->              122.5
+'   RoundAmountMid( 6.05, 0.1)                      ->                6.1
+'   RoundAmountMid( 7.05, 0.1)                      ->                7.1
+'
+' 2019-11-05. Gustav Brock, Cactus Data ApS, CPH.
+'
+Public Function RoundAmountMid( _
+    ByVal Value As Currency, _
+    Optional ByVal RoundValue As Currency) _
+    As Currency
+    
+    Dim BaseValue   As Variant
+    Dim Result      As Currency
+    
+    If RoundValue <> 0 Then
+        BaseValue = Int(Value / CDec(RoundValue) + CDec(0.5))
+        Result = BaseValue * RoundValue
+    Else
+        ' Don't round.
+        Result = Value
+    End If
+    
+    RoundAmountMid = Result
+
+End Function
+
+' Rounds a value up to the nearest multiplum of a rounding value.
+' If a negative or no rounding value is passed, the value will
+' not be rounded.
+'
+' Accepts any value of data type Currency and a rounding value
+' that will result in a value within the range of Currency.
+'
+' Negative values are rounded away from zero or, optionally, to zero.
+'
+' Examples:
+'
+'   RoundAmountUp(-922337203685477.5808, 0.05)      -> -922337203685477.55
+'   RoundAmountUp( 922337203685477.5807, 0.05)      ->  922337203685477.55
+'   RoundAmountUp( 10, 3)                           ->                9
+'   RoundAmountUp(-10,-3)                           ->               -9
+'   RoundAmountUp( 1.3, 0.2)                        ->                1.2
+'   RoundAmountUp( 122.25, 0.5)                     ->              122
+'   RoundAmountUp( 122.25, 25)                      ->              125
+'   RoundAmountUp(-122.25, 25)                      ->             -125
+'   RoundAmountUp(-122.25, 25, True)                ->             -100
+'   RoundAmountUp( 6.05, 0.1)                       ->                6
+'   RoundAmountUp( 7.05, 0.1)                       ->                7
+'
+' 2019-11-05. Gustav Brock, Cactus Data ApS, CPH.
+'
+Public Function RoundAmountUp( _
+    ByVal Value As Currency, _
+    Optional ByVal RoundValue As Currency, _
+    Optional ByVal RoundingToZero As Boolean) _
+    As Currency
+    
+    Dim BaseValue   As Variant
+    Dim Result      As Currency
+    
+    If RoundingToZero = True Or Value > 0 Then
+        ' Round numeric value up.
+        BaseValue = -Int(-Value / CDec(RoundValue))
+    Else
+        ' Round absolute value up.
+        BaseValue = Int(Value / CDec(RoundValue))
+    End If
+    Result = BaseValue * RoundValue
+
+    RoundAmountUp = Result
 
 End Function
 

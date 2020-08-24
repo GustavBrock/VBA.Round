@@ -85,6 +85,10 @@ Public Sub QuickSort(ByRef Values As Variant)
 
 End Sub
 
+' Demonstrates the usage of function QuickSort.
+'
+' 2018-03-16. Gustav Brock, Cactus Data ApS, CPH.
+'
 Public Sub QuickSortTest()
 
     Dim Samples(1 To 26)    As Variant
