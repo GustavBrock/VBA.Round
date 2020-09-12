@@ -43,6 +43,8 @@ All functions accept a specified count of decimals - including a negative count 
 
 The function **RoundSum** will round a series of numbers, so the sum of these matches the rounded sum of the unrounded values. Further, if a requested total is passed, the rounded values will be _scaled_, so the sum of these matches the rounded total. In cases where the sum of the rounded values doesn't match the rounded total, the rounded values will be adjusted where the applied error will be the relatively smallest.
 
+This can be particular useful in Excel. See the included demo (function *RoundDistribution*) for how to fill one range with rounded values from another range.
+
 ## Rounding by a power of two
 
 ![Rounding by a power of two](https://raw.githubusercontent.com/GustavBrock/VBA.Round/master/images/EE%20Power%202.png)

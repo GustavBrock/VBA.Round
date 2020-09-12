@@ -1,6 +1,6 @@
 Attribute VB_Name = "RoundingMethodsDemo"
-' RoundingMethodsDemo v1.2.3
-' (c) 2018-03-26. Gustav Brock, Cactus Data ApS, CPH.
+' RoundingMethodsDemo v1.2.4
+' (c) 2020-09-12. Gustav Brock, Cactus Data ApS, CPH.
 ' https://github.com/GustavBrock/VBA.Round
 '
 ' Demo functions to list rounding of example values.
@@ -213,4 +213,49 @@ Public Function RunRoundingSumDemo()
 
 End Function
 
+' Practical example for using Excel ranges for RoundSum
+'
+' Source URL:
+'   https://stackoverflow.com/questions/63715043/how-to-round-a-list-of-decimals-in-excel-so-that-the-sum-of-the-whole-numbers-e
+'
+' 2020-09-12. Gustav Brock, Cactus Data ApS, CPH.
+'
+Public Sub RoundDistribution()
 
+    ' Named ranges. These should pairwise match in row size.
+    Const ValuesName        As String = "Distribution"
+    Const RoundedValuesName As String = "Rounded_Distribution"
+    Const TotalName         As String = "Total"
+    Const RoundedTotalName  As String = "Rounded_Total"
+    
+    Dim Range       As Excel.Range
+    
+    Dim Values()    As Currency
+    Dim Results()   As Currency
+    
+    Dim Total       As Integer
+    Dim Index       As Integer
+    
+    ' Read distribution values from the named range.
+    Set Range = ThisWorkbook.Names(ValuesName).RefersToRange
+    ' Read total of distribution values.
+    Total = ThisWorkbook.Names(TotalName).RefersToRange(1, 1)
+    
+    ' Dim input and output arrays.
+    ReDim Values(1 To Range.Rows.Count)
+    ReDim Results(1 To Range.Rows.Count)
+    
+    ' Fill input array.
+    For Index = LBound(Values) To UBound(Values)
+        Values(Index) = Range(Index, 1)
+    Next
+    
+    ' Round total and retrieve array with rounded distribution values.
+    Results = RoundSum(Values, RoundMid(Total))
+    
+    ' Fill named range with rounded distribution values.
+    For Index = LBound(Results) To UBound(Results)
+        ThisWorkbook.Names(RoundedValuesName).RefersToRange(Index, 1) = Results(Index)
+    Next
+    
+End Sub
