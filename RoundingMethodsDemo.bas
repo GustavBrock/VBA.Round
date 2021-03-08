@@ -1,6 +1,6 @@
 Attribute VB_Name = "RoundingMethodsDemo"
-' RoundingMethodsDemo v1.2.5
-' (c) 2020-09-14. Gustav Brock, Cactus Data ApS, CPH.
+' RoundingMethodsDemo v1.2.6
+' (c) 2021-03-08. Gustav Brock, Cactus Data ApS, CPH.
 ' https://github.com/GustavBrock/VBA.Round
 '
 ' Demo functions to list rounding of example values.
@@ -104,7 +104,7 @@ End Sub
 ' Demo to run a series of example value sets and list
 ' the output from RoundingSum.
 '
-' 2018-03-26. Gustav Brock, Cactus Data ApS, CPH.
+' 2021-03-08. Gustav Brock, Cactus Data ApS, CPH.
 '
 Public Function RunRoundingSumDemo()
 
@@ -122,7 +122,7 @@ Public Function RunRoundingSumDemo()
     Dim Item                    As Integer
     
     ' Select tests to run.
-    Tests = Array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
+    Tests = Array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13)
     
     For Test = LBound(Tests) To UBound(Tests)
         RequestedTotal = 0
@@ -177,6 +177,11 @@ Public Function RunRoundingSumDemo()
                 Values = Array(1.333333 * 10 ^ -304, 1.333333 * 10 ^ -304, 0, 1, 1.33 * 10 ^ -304)
                 RequestedTotal = 4.1
                 NumDigitsAfterDecimal = 1
+            Case 13
+                ' Create an array with nine elements to share equally in nine parts.
+                Values = Array(9, 9, 9, 9, 9, 9, 9, 9, 9)
+                RequestedTotal = 732000
+                NumDigitsAfterDecimal = 6
             Case Else
                 Values = Null
         End Select
