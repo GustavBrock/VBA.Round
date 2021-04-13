@@ -37,6 +37,13 @@ The forth exists in three varieties - for Currency, Decimal, and Double respecti
 
 All functions accept a specified count of decimals - including a negative count which will round to tens, hundreds, etc. Those with Variant as return type will return *Null* for incomprehensible input.
 
+#### Rounding in Excel
+
+Note please, that while `VBA.Round` is severely buggy, the `Excel.WorksheetFunction.Round` is not. Also, it performs *correct 4/5 rounding* like the function here, `RoundMid`, does (see module/file `RoundingMethodsTestExcel.bas`).
+
+While the worksheet function conveniently is right at hand, it is, however, about *three times slower* than `RoundMid`.
+
+
 ## Rounding a series of numbers to a sum
 
 ![Rounding a series of numbers to a sum](https://raw.githubusercontent.com/GustavBrock/VBA.Round/master/images/EE%20Slices.png)
