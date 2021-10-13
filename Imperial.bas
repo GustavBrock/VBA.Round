@@ -1,6 +1,6 @@
 Attribute VB_Name = "Imperial"
-' Imperial v1.0.4
-' (c) 2018-04-19. Gustav Brock, Cactus Data ApS, CPH
+' Imperial v1.0.5
+' (c) 2021-10-13. Gustav Brock, Cactus Data ApS, CPH
 ' https://github.com/GustavBrock/VBA.Round
 '
 ' Set of functions for converting between imperial and metric measures
@@ -84,8 +84,8 @@ Public Const SmartDoubleQuote   As Long = 148
 '   FormatFeetInches(7.222, 2, "F feet i-r inches")     -> 0 feet 7-1/4 inches
 '   FormatFeetInches(27.22, 6, "f foot and I r inch")   -> 2 feet and 3 7/32 inches
 '
-'   FormatFeetInches(17.222, 0, , , Up)                 -> 1' 6"
-'   FormatFeetInches(17.222, 0, , , Down)               -> 1' 5"
+'   FormatFeetInches(17.222, 0, , , rmUp)               -> 1' 6"
+'   FormatFeetInches(17.222, 0, , , rmDown)             -> 1' 5"
 '
 ' Also, se comments for the required functions:
 '
@@ -101,7 +101,7 @@ Public Function FormatFeetInches( _
     Optional ByVal Exponent As Long, _
     Optional ByVal Format As String, _
     Optional ByVal SmartQuotes As Boolean, _
-    Optional RoundingMethod As rmRoundingMethod = Midpoint, _
+    Optional RoundingMethod As RmRoundingMethod = rmMidpoint, _
     Optional RoundingAsAbsolute As Boolean) _
     As String
     

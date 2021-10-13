@@ -1,6 +1,6 @@
 Attribute VB_Name = "RoundingMethods"
-' RoundingMethods v1.4.0
-' (c) 2019-11-05. Gustav Brock, Cactus Data ApS, CPH
+' RoundingMethods v1.4.1
+' (c) 2021-10-13. Gustav Brock, Cactus Data ApS, CPH
 ' https://github.com/GustavBrock/VBA.Round
 '
 ' Set of functions for rounding Currency, Decimal, and Double
@@ -26,10 +26,10 @@ Public Const Base10     As Double = 10
 
 ' Enums.
 '
-Public Enum rmRoundingMethod
-    Down = -1
-    Midpoint = 0
-    Up = 1
+Public Enum RmRoundingMethod
+    rmDown = -1
+    rmMidpoint = 0
+    rmUp = 1
 End Enum
 
 ' Returns Log 10 of Value.
@@ -1381,13 +1381,13 @@ End Function
 '   Numerator = 1
 '   Denominator = 4
 '
-'   Result = ConvertDecimalFractions(Value, Exponent, Numerator, Denominator, Up)
+'   Result = ConvertDecimalFractions(Value, Exponent, Numerator, Denominator, rmUp)
 '
 '   Result = 7.25
 '   Numerator = 1
 '   Denominator = 4
 '
-'   Result = ConvertDecimalFractions(Value, Exponent, Numerator, Denominator, Down)
+'   Result = ConvertDecimalFractions(Value, Exponent, Numerator, Denominator, rmDown)
 '
 '   Result = 7
 '   Numerator = 0
@@ -1414,7 +1414,7 @@ Public Function ConvertDecimalFractions( _
     ByVal Exponent As Integer, _
     Optional ByRef Numerator As Long, _
     Optional ByRef Denominator As Long, _
-    Optional RoundingMethod As rmRoundingMethod = Midpoint, _
+    Optional RoundingMethod As RmRoundingMethod = rmMidpoint, _
     Optional RoundingAsAbsolute As Boolean) _
     As Variant
     
@@ -1423,21 +1423,21 @@ Public Function ConvertDecimalFractions( _
     
     ' Validate rounding method.
     Select Case RoundingMethod
-        Case Up, Midpoint, Down
+        Case rmUp, rmMidpoint, rmDown
             ' OK.
         Case Else
             ' Use default rounding method.
-            RoundingMethod = Midpoint
+            RoundingMethod = rmMidpoint
     End Select
     
     If Exponent <= 0 Then
         ' Integer rounding only.
         Select Case RoundingMethod
-            Case Up
+            Case rmUp
                 Number = RoundUpBase2(Value, Exponent, RoundingAsAbsolute)
-            Case Midpoint
+            Case rmMidpoint
                 Number = RoundMidBase2(Value, Exponent)
-            Case Down
+            Case rmDown
                 Number = RoundDownBase2(Value, Exponent, RoundingAsAbsolute)
         End Select
         Fraction = 0
@@ -1447,11 +1447,11 @@ Public Function ConvertDecimalFractions( _
         ' Rounding with fractions.
         Number = Fix(CDec(Value))
         Select Case RoundingMethod
-            Case Up
+            Case rmUp
                 Fraction = RoundUpBase2(Value - Number, Exponent, RoundingAsAbsolute)
-            Case Midpoint
+            Case rmMidpoint
                 Fraction = RoundMidBase2(Value - Number, Exponent)
-            Case Down
+            Case rmDown
                 Fraction = RoundDownBase2(Value - Number, Exponent, RoundingAsAbsolute)
         End Select
         
