@@ -233,7 +233,7 @@ End Function
 Public Sub RoundRecordSum( _
     ByRef Records As DAO.Recordset, _
     ByVal Total As Double, _
-    Optional ByVal NumDigitsAfterDecimals As Long)
+    Optional ByVal NumDigitsAfterDecimal As Long)
 
     Dim Rows        As Variant
     Dim Values()    As Double
@@ -270,7 +270,7 @@ Public Sub RoundRecordSum( _
     End If
     
     ' Round the array of values.
-    Values = RoundSum(Values, Total, NumDigitsAfterDecimals)
+    Values = RoundSum(Values, Total, NumDigitsAfterDecimal)
     
     ' Write the values to the second field of the recordset.
     Total = 0
