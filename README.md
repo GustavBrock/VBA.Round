@@ -52,6 +52,8 @@ The function **RoundSum** will round a series of numbers, so the sum of these ma
 
 This can be particular useful in Excel. See the included demo (function *RoundDistribution*) for how to fill one range with rounded values from another range.
 
+Also a field of a recordset can be rounded to match either the original total or a new total. See sub *RoundRecordSum* in module *RoundingMethodsDemo*.
+
 ## Rounding by a power of two
 
 ![Rounding by a power of two](https://raw.githubusercontent.com/GustavBrock/VBA.Round/master/images/EE%20Power%202.png)

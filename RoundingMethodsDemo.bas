@@ -1,9 +1,11 @@
 Attribute VB_Name = "RoundingMethodsDemo"
-' RoundingMethodsDemo v1.2.6
-' (c) 2021-03-08. Gustav Brock, Cactus Data ApS, CPH.
+' RoundingMethodsDemo v1.3.0
+' (c) 2024-03-11. Gustav Brock, Cactus Data ApS, CPH.
 ' https://github.com/GustavBrock/VBA.Round
 '
-' Demo functions to list rounding of example values.
+' Demo functions to:
+'   - list rounding of example values
+'   - round a field of a recordset
 '
 ' License: MIT (http://opensource.org/licenses/mit-license.php)
 
@@ -218,57 +220,72 @@ Public Function RunRoundingSumDemo()
 
 End Function
 
-' Practical example for using Excel ranges for RoundSum
+' Round the values of one field of a recordset and write the rounded values (matching the total)
+' to another field of the recordset.
 '
-' Source URL:
-'   https://stackoverflow.com/questions/63715043/how-to-round-a-list-of-decimals-in-excel-so-that-the-sum-of-the-whole-numbers-e
+' Example:
+'   Rounding the values to two decimals for the sum to match the original sum:
 '
-' 2020-09-14. Gustav Brock, Cactus Data ApS, CPH.
+'   RoundRecordSum CurrentDb.OpenRecordset("Select Value, RoundedValue From SomeTable"), 0, 2
 '
-Public Sub RoundDistribution()
+' 2024-03-11. Gustav Brock, Cactus Data ApS, CPH.
+'
+Public Sub RoundRecordSum( _
+    ByRef Records As DAO.Recordset, _
+    ByVal Total As Double, _
+    Optional ByVal NumDigitsAfterDecimals As Long)
 
-    ' Named ranges. These should pairwise match in row size.
-    Const VolumeName        As String = "Volume"
-    Const PercentValuesName As String = "Percent_Distribution"
-    Const ValuesName        As String = "Distribution"
-    Const RoundedValuesName As String = "Rounded_Distribution"
+    Dim Rows        As Variant
+    Dim Values()    As Double
+    Dim Value       As Double
+    Dim Sum         As Double
+    Dim RecordCount As Long
+    Dim Index       As Long
     
-    Dim Range       As Excel.Range
+    If Records.RecordCount = 0 Then
+        Exit Sub
+    End If
     
-    Dim Values()    As Currency
-    Dim Results()   As Currency
+    ' Count records.
+    Records.MoveLast
+    Records.MoveFirst
+    RecordCount = Records.RecordCount
+    ' Retrieve multi-dimensional array.
+    Rows = Records.GetRows(RecordCount)
     
-    Dim Total       As Integer
-    Dim Index       As Integer
-    
-    ' Read percent distribution values from the named range.
-    Set Range = ThisWorkbook.Names(PercentValuesName).RefersToRange
-    ' Read original volume value.
-    Total = ThisWorkbook.Names(VolumeName).RefersToRange(1, 1)
-    
-    ' Dim input and output arrays.
-    ReDim Values(1 To Range.Rows.Count)
-    ReDim Results(1 To Range.Rows.Count)
-    
-    ' Fill input array.
+    ' Read values from the first field of the recordset.
+    ' Convert to one-dimensional array and calculate the sum.
+    ReDim Values(0 To UBound(Rows, 2))
     For Index = LBound(Values) To UBound(Values)
-        Values(Index) = Range(Index, 1)
+        Value = Rows(0, Index)
+        Values(Index) = Value
+        Sum = Sum + Value
+        Debug.Print Value
     Next
+    Debug.Print "Sum:", Sum
     
-    ' Round total and retrieve array with distribution values.
-    Results = RoundSum(Values, RoundMid(Total), 2)
+    ' Adjust sum of output if needed.
+    If Total = 0 Then
+        Total = Sum
+    End If
     
-    ' Fill named range with distribution values.
-    For Index = LBound(Results) To UBound(Results)
-        ThisWorkbook.Names(ValuesName).RefersToRange(Index, 1) = Results(Index)
+    ' Round the array of values.
+    Values = RoundSum(Values, Total, NumDigitsAfterDecimals)
+    
+    ' Write the values to the second field of the recordset.
+    Total = 0
+    Records.MoveFirst
+    For Index = LBound(Values) To UBound(Values)
+        Value = Values(Index)
+        If Records(1).Value <> Value Then
+            Records.Edit
+            Records(1).Value = Value
+            Records.Update
+        End If
+        Total = Total + Value
+        Records.MoveNext
     Next
-    
-    ' Round total and retrieve array with rounded distribution values.
-    Results = RoundSum(Values, RoundMid(Total))
-    
-    ' Fill named range with rounded distribution values.
-    For Index = LBound(Results) To UBound(Results)
-        ThisWorkbook.Names(RoundedValuesName).RefersToRange(Index, 1) = Results(Index)
-    Next
+    Debug.Print "Total:", Total
     
 End Sub
+
