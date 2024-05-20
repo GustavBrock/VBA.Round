@@ -1,6 +1,6 @@
 Attribute VB_Name = "RoundingMethods"
-' RoundingMethods v1.4.1
-' (c) 2021-10-13. Gustav Brock, Cactus Data ApS, CPH
+' RoundingMethods v1.4.2
+' (c) 2024-05-20. Gustav Brock, Cactus Data ApS, CPH
 ' https://github.com/GustavBrock/VBA.Round
 '
 ' Set of functions for rounding Currency, Decimal, and Double
@@ -32,30 +32,54 @@ Public Enum RmRoundingMethod
     rmUp = 1
 End Enum
 
-' Returns Log 10 of Value.
+' Calculate Log 10 of Value.
+' Returns the value rounded to 16 decimals to remove a tiny fraction
+' that otherwise will cause Int(Log10) to return invalid results for
+' values of 10 ^ y where y is a positive multiplum of 3.
 '
-' 2018-02-09. Gustav Brock, Cactus Data ApS, CPH.
+' Example without rounding (y = 3):
+'   ? Int(Log10(1000))
+'   2
+' Example with rounding:
+'   ? Int(Log10(1000))
+'   3
+'
+' Note:
+'   No error handling as this should be handled outside this function.
+'
+'   Example:
+'
+'       If MyValue > 0 then
+'           LogMyValue = Log10(MyValue)
+'       Else
+'           ' Do something else ...
+'       End If
+'
+' 2024-05-20. Gustav Brock, Cactus Data ApS, CPH.
 '
 Public Function Log10( _
     ByVal Value As Double) _
     As Double
 
-    ' No error handling as this should be handled
-    ' outside this function.
-    '
-    ' Example:
-    '
-    '     If MyValue > 0 then
-    '         LogMyValue = Log10(MyValue)
-    '     Else
-    '         ' Do something else ...
-    '     End If
+    Const Half              As Double = 0.5
+    Const Scaling           As Double = 10 ^ 16
     
-    Log10 = Log(Value) / Log(Base10)
+    Log10 = CDec(Int(Log(Value) / Log(Base10) * Scaling + Half) / Scaling)
 
 End Function
 
-' Returns Log 2 of Value.
+' Calculate Log 2 of Value.
+'
+' Note:
+'   No error handling as this should be handled outside this function.
+'
+'   Example:
+'
+'       If MyValue > 0 then
+'           LogMyValue = Log2(MyValue)
+'       Else
+'           ' Do something else ...
+'       End If
 '
 ' 2018-02-20. Gustav Brock, Cactus Data ApS, CPH.
 '
@@ -63,17 +87,6 @@ Public Function Log2( _
     ByVal Value As Double) _
     As Double
 
-    ' No error handling as this should be handled
-    ' outside this function.
-    '
-    ' Example:
-    '
-    '     If MyValue > 0 then
-    '         LogMyValue = Log2(MyValue)
-    '     Else
-    '         ' Do something else ...
-    '     End If
-    
     Log2 = Log(Value) / Log(Base2)
 
 End Function
