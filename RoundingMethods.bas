@@ -1,6 +1,6 @@
 Attribute VB_Name = "RoundingMethods"
-' RoundingMethods v1.4.2
-' (c) 2024-05-20. Gustav Brock, Cactus Data ApS, CPH
+' RoundingMethods v1.4.3
+' (c) 2024-05-27. Gustav Brock, Cactus Data ApS, CPH
 ' https://github.com/GustavBrock/VBA.Round
 '
 ' Set of functions for rounding Currency, Decimal, and Double
@@ -33,19 +33,16 @@ Public Enum RmRoundingMethod
 End Enum
 
 ' Calculate Log 10 of Value.
-' Returns the value rounded to 16 decimals to remove a tiny fraction
-' that otherwise will cause Int(Log10) to return invalid results for
-' values of 10 ^ y where y is a positive multiplum of 3.
+' Uses CDec to remove a tiny fraction that otherwise will cause Int(Log10) to return
+' invalid results for values of 10 ^ y where y is a positive multiplum of 3.
 '
-' Example without rounding (y = 3):
-'   ? Int(Log10(1000))
-'   2
-' Example with rounding:
-'   ? Int(Log10(1000))
-'   3
+' Reference:
+'   Common logarithm
+'   https://en.wikipedia.org/wiki/Common_logarithm
 '
 ' Note:
-'   No error handling as this should be handled outside this function.
+'   No error handling is present as the function should fail for values of zero or less,
+'   thus invalid values must be handled before calling this function.
 '
 '   Example:
 '
@@ -55,23 +52,27 @@ End Enum
 '           ' Do something else ...
 '       End If
 '
-' 2024-05-20. Gustav Brock, Cactus Data ApS, CPH.
+' 2024-05-27. Gustav Brock, Cactus Data ApS, CPH.
 '
 Public Function Log10( _
     ByVal Value As Double) _
     As Double
 
-    Const Half              As Double = 0.5
-    Const Scaling           As Double = 10 ^ 16
-    
-    Log10 = CDec(Int(Log(Value) / Log(Base10) * Scaling + Half) / Scaling)
+    Log10 = CDbl(CDec(Log(Value) / Log(Base10)))
 
 End Function
 
 ' Calculate Log 2 of Value.
+' Uses CDec to remove a tiny fraction that otherwise will cause Int(Log2) to return
+' invalid results for many values of 2 ^ y where y ..............is a positive multiplum of 3.
+'
+' Reference:
+'   Common logarithm
+'   https://en.wikipedia.org/wiki/Common_logarithm
 '
 ' Note:
-'   No error handling as this should be handled outside this function.
+'   No error handling is present as the function should fail for values of zero or less,
+'   thus invalid values must be handled before calling this function.
 '
 '   Example:
 '
@@ -81,13 +82,13 @@ End Function
 '           ' Do something else ...
 '       End If
 '
-' 2018-02-20. Gustav Brock, Cactus Data ApS, CPH.
+' 2024-05-27. Gustav Brock, Cactus Data ApS, CPH.
 '
 Public Function Log2( _
     ByVal Value As Double) _
     As Double
 
-    Log2 = Log(Value) / Log(Base2)
+    Log2 = CDbl(CDec(Log(Value) / Log(Base2)))
 
 End Function
 

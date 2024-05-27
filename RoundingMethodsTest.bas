@@ -1,6 +1,6 @@
 Attribute VB_Name = "RoundingMethodsTest"
-' RoundingMethodsTest v1.2.1
-' (c) 2018-03-16. Gustav Brock, Cactus Data ApS, CPH.
+' RoundingMethodsTest v1.2.2
+' (c) 2024-05-27. Gustav Brock, Cactus Data ApS, CPH.
 ' https://github.com/GustavBrock/VBA.Round
 '
 ' Test function to list rounding of example values.
@@ -752,3 +752,82 @@ Public Function RoundingSignificantDemo()
     Debug.Print
 
 End Function
+
+' Verify the result by Log2 for some values of 2 ^ y.
+' Compares Log2 with the basic expression.
+'
+' Expected output.
+' Log2 is always right, the basic expression (last coloumn) is not:
+'
+'   y   2 ^ y                      Log2
+'   --  -------------------------  ------------  -----
+'   47  140737488355328            True          False
+'   48  281474976710656            True          True
+'   49  562949953421312            True          True
+'   50  1.12589990684262E+15       True          True
+'   51  2.25179981368525E+15       True          False
+'   52  4.5035996273705E+15        True          True
+'   53  9.00719925474099E+15       True          True
+'   54  1.8014398509482E+16        True          True
+'   55  3.6028797018964E+16        True          False
+'   56  7.20575940379279E+16       True          True
+'   57  1.44115188075856E+17       True          True
+'   58  2.88230376151712E+17       True          False
+'   59  5.76460752303423E+17       True          False
+'   60  1.15292150460685E+18       True          True
+'   61  2.30584300921369E+18       True          True
+'   62  4.61168601842739E+18       True          False
+'   63  9.22337203685478E+18       True          True
+'
+' 2024-05-27. Gustav Brock, Cactus Data ApS, CPH.
+'
+Public Sub VerifyLog2()
+
+    Dim Exponent            As Integer
+    
+    For Exponent = 47 To 63
+        Debug.Print _
+            Exponent, _
+            2 ^ Exponent, _
+            Log2(2 ^ Exponent) = Exponent, _
+            Log(2 ^ Exponent) / Log(Base2) = Exponent
+    Next
+
+End Sub
+
+' Verify the result by Log2 for some values of 10 ^ y.
+' Compares Log10 with the basic expression.
+'
+' Expected output.
+' Log10 is always right, the basic expression (last coloumn) is not:
+'
+'    y         Log10     y - Log10
+'   --
+'    1             1             0             0
+'    2             2             0             0
+'    3             3             0             3.85759132970342E-16
+'    4             4             0             0
+'    5             5             0             3.85542292535845E-16
+'    6             6             0             7.71518265940685E-16
+'    7             7             0             3.85542292535845E-16
+'    8             8             0             0
+'    9             9             0             1.15706055847653E-15
+'   10            10             0             7.71084585071691E-16
+'   11            11             0             3.8597597340484E-16
+'   12            12             0             1.54303653188137E-15
+'
+' 2024-05-27. Gustav Brock, Cactus Data ApS, CPH.
+'
+Public Sub VerifyLog10()
+
+    Dim Exponent            As Integer
+
+    For Exponent = 1 To 12
+        Debug.Print _
+            Exponent, _
+            Log10(10 ^ Exponent), _
+            Exponent - Log10(10 ^ Exponent), _
+            Exponent - (Log(10 ^ Exponent) / Log(Base10))
+    Next
+
+End Sub
